@@ -1,0 +1,117 @@
+package ucube.com.manage.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import ucube.com.manage.model.Sign;
+import ucube.com.manage.service.SignService;
+
+@CrossOrigin("*")
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/sign")
+@Slf4j
+public class SignController {
+
+  private final SignService signService;
+
+  private HashMap<String, Object> map = new HashMap<String, Object>();
+
+  // 전체 조회
+  @GetMapping("/list/{signMonth}")
+  public ResponseEntity<?> findAll(@PathVariable("signMonth") String signMonth) {
+    try {
+      List<Sign> list = signService.signList(signMonth);
+
+      if (list.isEmpty() || list.size() == 0) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(list, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // 상세 조회
+  @GetMapping("/list/{sign_idx}/{signMonth}")
+  public ResponseEntity<?> findDetail(@PathVariable("sign_idx") String sign_idx, @PathVariable("signMonth") String signMonth) {
+    map.put("sign_idx", sign_idx);
+    map.put("signMonth", signMonth);
+
+    Optional<Sign> sign = signService.signQuery(map);
+    if (sign.isPresent()) {
+      return new ResponseEntity<>(sign.get(), HttpStatus.OK);
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  }
+
+  // like 조회
+  @GetMapping("/like")
+  public ResponseEntity<?> findLikeNm(@RequestParam("signMonth") String signMonth,
+      @RequestParam("pjtNo") String pjtNo,  @RequestParam("companyNm") String companyNm,  @RequestParam("bpPerson") String bpPerson) {
+
+    map.put("signMonth", signMonth);
+    map.put("pjtNo", pjtNo);
+    map.put("companyNm", companyNm);
+    map.put("bpPerson", bpPerson);
+
+    try {
+      List<Sign> list = signService.signLikeList(map);
+      if (list.isEmpty() || list.size() == 0) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(list, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // 저장 하기
+  @PostMapping("/save")
+  public ResponseEntity<?> save(@RequestBody Sign sign) {
+    try {
+      return new ResponseEntity<>(signService.signSave(sign), HttpStatus.CREATED);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // 수정 하기
+  @PutMapping("/update")
+  public ResponseEntity<?> update(@RequestBody Sign sign) {
+    try {
+      return new ResponseEntity<>(signService.signUpdate(sign), HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // 삭제 하기
+  @DeleteMapping("/delete/{sign_idx}/{signMonth}")
+  public ResponseEntity<?> delete(@PathVariable("sign_idx") String sign_idx, @PathVariable("signMonth") String signMonth) {
+    map.put("sign_idx", sign_idx);
+    map.put("signMonth", signMonth);
+
+    try {
+      return new ResponseEntity<>(signService.signDelete(map), HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+}

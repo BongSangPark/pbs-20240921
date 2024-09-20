@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ucube.com.manage.mapper.ContractMapper">
+
+  <select id="listProject" resultType="ProjectInfo">
+
+    select  pjtNo,
+            pjtNm
+    from  project_tb
+    group by pjtNo
+    order by pjtNo asc
+
+  </select>
+
+  <select id="listCompany" resultType="ProjectInfo">
+
+    select  companyNo,
+            companyNm
+    from  company_tb
+    group by companyNo
+    order by companyNo asc
+
+  </select>
+
+  <insert id="saveContract">
+
+    insert into contract_tb (pjtNo, companyNo, bpPerson, grade, birth, startDt, endDt, contractMm, price, sumPrice)
+    values (#{pjtNo}, #{companyNo}, #{bpPerson}, #{grade}, #{birth}, #{startDt}, #{endDt}, #{contractMm}, #{price}, #{sumPrice})
+
+  </insert>
+
+  <select id="listContract" resultType="Contract">
+
+    select  a.contract_idx  contract_idx,
+            a.pjtNo         pjtNo,
+            b.pjtNm         pjtNm,
+            a.companyNo     companyNo,
+            c.companyNm     companyNm,
+            c.leader        leader,
+            a.bpPerson      bpPerson,
+            a.sumPrice      sumPrice
+    from  contract_tb a,
+          project_tb  b,
+          company_tb  c
+    where a.pjtNo = b.pjtNo
+    and   a.companyNo = c.companyNo
+    group by a.contract_idx,
+            a.pjtNo,
+            b.pjtNm,
+            a.companyNo,
+            c.companyNm,
+            c.leader,
+            a.bpPerson
+    order by a.pjtNo asc, c.companyNm asc, a.bpPerson asc
+
+  </select>
+
+  <select id="findById" resultType="Contract">
+
+    select  a.contract_idx  contract_idx,
+            a.pjtNo         pjtNo,
+            b.pjtNm         pjtNm,
+            a.companyNo     companyNo,
+            c.companyNm     companyNm,
+            c.leader        leader,
+            a.bpPerson      bpPerson,
+            a.grade         grade,
+            a.birth         birth,
+            a.startDt       startDt,
+            a.endDt         endDt,
+            a.contractMm    contractMm,
+            a.price         price,
+            a.sumPrice      sumPrice
+    from  contract_tb a,
+          project_tb  b,
+          company_tb  c
+    where a.contract_idx  = ${contract_idx}
+    and   a.pjtNo         = b.pjtNo
+    and   a.companyNo     = c.companyNo
+
+  </select>
+
+  <select id="listLikeContract" parameterType="Hashmap" resultType="Contract">
+
+    select  a.contract_idx  contract_idx,
+            a.pjtNo         pjtNo,
+            b.pjtNm         pjtNm,
+            a.companyNo     companyNo,
+            c.companyNm     companyNm,
+            c.leader        leader,
+            a.bpPerson      bpPerson,
+            a.sumPrice      sumPrice
+    from  contract_tb a,
+          project_tb  b,
+          company_tb  c
+    where a.pjtNo LIKE concat('%', #{pjtNo}, '%')
+    and   a.pjtNo = b.pjtNo
+    and   a.companyNo = c.companyNo
+    and   c.companyNm  LIKE concat('%', #{companyNm}, '%')
+    group by a.contract_idx,
+            a.pjtNo,
+            b.pjtNm,
+            a.companyNo,
+            c.companyNm,
+            c.leader,
+            a.bpPerson
+    order by a.pjtNo asc, c.companyNm asc, a.bpPerson asc
+
+  </select>
+
+  <update id="updateContract" parameterType="Contract">
+
+    update contract_tb
+    set bpPerson    = #{bpPerson},
+        grade       = #{grade},
+        birth       = #{birth},
+        startDt     = #{startDt},
+        endDt       = #{endDt},
+        contractMm  = #{contractMm},
+        price       = #{price},
+        sumPrice    = #{sumPrice}
+    where contract_idx  = #{contract_idx}
+
+  </update>
+
+  <delete id="deleteContract" parameterType="String">
+
+    delete from contract_tb
+    where contract_idx  = #{contract_idx}
+
+  </delete>
+
+</mapper>

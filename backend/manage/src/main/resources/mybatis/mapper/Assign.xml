@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ucube.com.manage.mapper.AssignMapper">
+
+  <select id="listProject" resultType="ProjectInfo">
+
+    select  pjtNo,
+            pjtNm
+    from  project_tb
+    group by pjtNo
+    order by pjtNo asc
+
+  </select>
+
+  <select id="listCompany" resultType="ProjectInfo">
+
+    select  companyNo,
+            companyNm
+    from  company_tb
+    group by companyNo
+    order by companyNo asc
+
+  </select>
+
+  <insert id="saveAssign">
+
+    insert into assign_tb (pjtNo, companyNo, assignMonth, bpPerson, grade, birth, startDt, endDt, assignMm)
+    values (#{pjtNo}, #{companyNo}, #{assignMonth}, #{bpPerson}, #{grade}, #{birth}, #{startDt}, #{endDt}, #{assignMm})
+
+  </insert>
+
+  <select id="listAssign" parameterType="String" resultType="Assign">
+
+    select  a.assign_idx    assign_idx,
+            a.pjtNo         pjtNo,
+            b.pjtNm         pjtNm,
+            a.companyNo     companyNo,
+            c.companyNm     companyNm,
+            a.assignMonth   assignMonth,
+            a.bpPerson      bpPerson,
+            a.grade         grade
+    from  assign_tb a,
+          project_tb  b,
+          company_tb  c
+    where a.assignMonth = ${assignMonth}
+    and   a.pjtNo     = b.pjtNo
+    and   a.companyNo = c.companyNo
+    group by a.assign_idx,
+            a.pjtNo,
+            b.pjtNm,
+            a.companyNo,
+            c.companyNm,
+            a.assignMonth,
+            a.bpPerson,
+            a.grade
+    order by a.assignMonth asc, a.pjtNo asc, c.companyNm asc, a.bpPerson asc
+
+  </select>
+
+  <select id="findById" parameterType="Hashmap" resultType="Assign">
+
+    select  a.assign_idx    assign_idx,
+            a.pjtNo         pjtNo,
+            b.pjtNm         pjtNm,
+            a.companyNo     companyNo,
+            c.companyNm     companyNm,
+            a.assignMonth   assignMonth,
+            a.bpPerson      bpPerson,
+            a.grade         grade,
+            a.birth         birth,
+            a.startDt       startDt,
+            a.endDt         endDt,
+            a.assignMm      assignMm
+    from  assign_tb a,
+          project_tb  b,
+          company_tb  c
+    where a.assign_idx  = ${assign_idx}
+    and   a.assignMonth = ${assignMonth}
+    and   a.pjtNo       = b.pjtNo
+    and   a.companyNo   = c.companyNo
+
+  </select>
+
+  <select id="listLikeAssign" parameterType="Hashmap" resultType="Assign">
+
+    select  a.assign_idx    assign_idx,
+            a.pjtNo         pjtNo,
+            b.pjtNm         pjtNm,
+            a.companyNo     companyNo,
+            c.companyNm     companyNm,
+            a.assignMonth   assignMonth,
+            a.bpPerson      bpPerson,
+            a.grade         grade
+    from  assign_tb a,
+          project_tb  b,
+          company_tb  c
+    where a.assignMonth = ${assignMonth}
+    and   a.pjtNo = b.pjtNo
+    and   a.companyNo = c.companyNo
+    and   a.pjtNo  LIKE concat('%', #{pjtNo}, '%')
+    and   c.companyNm  LIKE concat('%', #{companyNm}, '%')
+    and   a.bpPerson  LIKE concat('%', #{bpPerson}, '%')
+    group by a.assign_idx,
+            a.pjtNo,
+            b.pjtNm,
+            a.companyNo,
+            c.companyNm,
+            a.assignMonth,
+            a.bpPerson,
+            a.grade
+    order by a.assignMonth asc, a.pjtNo asc, c.companyNm asc, a.bpPerson asc
+
+  </select>
+
+  <update id="updateAssign" parameterType="Assign">
+
+    update assign_tb
+    set pjtNo       = #{pjtNo},
+        companyNo   = #{companyNo},
+        bpPerson    = #{bpPerson},
+        grade       = #{grade},
+        birth       = #{birth},
+        startDt     = #{startDt},
+        endDt       = #{endDt},
+        assignMm    = #{assignMm}
+    where assign_idx  = ${assign_idx}
+    and   assignMonth = ${assignMonth}
+
+  </update>
+
+  <delete id="deleteAssign" parameterType="Hashmap">
+
+    delete from assign_tb
+    where assign_idx  = ${assign_idx}
+    and   assignMonth = ${assignMonth}
+
+  </delete>
+
+</mapper>

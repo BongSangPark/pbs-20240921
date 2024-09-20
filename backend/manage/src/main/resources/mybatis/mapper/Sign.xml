@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ucube.com.manage.mapper.SignMapper">
+
+  <select id="listProject" resultType="ProjectInfo">
+
+    select  pjtNo,
+            pjtNm
+    from  project_tb
+    group by pjtNo
+    order by pjtNo asc
+
+  </select>
+
+  <select id="listCompany" resultType="ProjectInfo">
+
+    select  companyNo,
+            companyNm
+    from  company_tb
+    group by companyNo
+    order by companyNo asc
+
+  </select>
+
+  <insert id="saveSign">
+
+    insert into sign_tb (pjtNo, companyNo, signMonth, bpPerson, grade, birth, startDt, endDt, signMm, price, sumPrice)
+    values (#{pjtNo}, #{companyNo}, #{signMonth}, #{bpPerson}, #{grade}, #{birth}, #{startDt}, #{endDt}, #{signMm}, #{price}, #{sumPrice})
+
+  </insert>
+
+  <select id="listSign" parameterType="String" resultType="Sign">
+
+    select  a.sign_idx    sign_idx,
+            a.pjtNo       pjtNo,
+            b.pjtNm       pjtNm,
+            a.companyNo   companyNo,
+            c.companyNm   companyNm,
+            a.signMonth   signMonth,
+            a.bpPerson    bpPerson,
+            a.grade       grade
+    from  sign_tb a,
+          project_tb  b,
+          company_tb  c
+    where a.signMonth = ${signMonth}
+    and   a.pjtNo     = b.pjtNo
+    and   a.companyNo = c.companyNo
+    group by a.sign_idx,
+            a.pjtNo,
+            b.pjtNm,
+            a.companyNo,
+            c.companyNm,
+            a.signMonth,
+            a.bpPerson,
+            a.grade
+    order by a.signMonth asc, a.pjtNo asc, c.companyNm asc, a.bpPerson asc
+
+  </select>
+
+  <select id="findById" parameterType="Hashmap" resultType="Sign">
+
+    select  a.sign_idx    sign_idx,
+            a.pjtNo       pjtNo,
+            b.pjtNm       pjtNm,
+            a.companyNo   companyNo,
+            c.companyNm   companyNm,
+            a.signMonth   signMonth,
+            a.bpPerson    bpPerson,
+            a.grade       grade,
+            a.birth       birth,
+            a.startDt     startDt,
+            a.endDt       endDt,
+            a.signMm      signMm,
+            a.price       price,
+            a.sumPrice    sumPrice
+    from  sign_tb a,
+          project_tb  b,
+          company_tb  c
+    where a.sign_idx  = ${sign_idx}
+    and   a.signMonth = ${signMonth}
+    and   a.pjtNo     = b.pjtNo
+    and   a.companyNo = c.companyNo
+
+  </select>
+
+  <select id="listLikeSign" parameterType="Hashmap" resultType="Sign">
+
+    select  a.sign_idx    sign_idx,
+            a.pjtNo       pjtNo,
+            b.pjtNm       pjtNm,
+            a.companyNo   companyNo,
+            c.companyNm   companyNm,
+            a.signMonth   signMonth,
+            a.bpPerson    bpPerson,
+            a.grade       grade
+    from  sign_tb     a,
+          project_tb  b,
+          company_tb  c
+    where a.signMonth = ${signMonth}
+    and   a.pjtNo = b.pjtNo
+    and   a.companyNo = c.companyNo
+    and   a.pjtNo  LIKE concat('%', #{pjtNo}, '%')
+    and   c.companyNm  LIKE concat('%', #{companyNm}, '%')
+    and   a.bpPerson  LIKE concat('%', #{bpPerson}, '%')
+    group by a.sign_idx,
+            a.pjtNo,
+            b.pjtNm,
+            a.companyNo,
+            c.companyNm,
+            a.signMonth,
+            a.bpPerson,
+            a.grade
+    order by a.signMonth asc, a.pjtNo asc, c.companyNm asc, a.bpPerson asc
+
+  </select>
+
+  <update id="updateSign" parameterType="Sign">
+
+    update sign_tb
+    set pjtNo       = #{pjtNo},
+        companyNo   = #{companyNo},
+        bpPerson    = #{bpPerson},
+        grade       = #{grade},
+        birth       = #{birth},
+        startDt     = #{startDt},
+        endDt       = #{endDt},
+        signMm      = #{signMm},
+        price       = #{price},
+        sumPrice    = #{sumPrice}
+    where sign_idx  = ${sign_idx}
+    and   signMonth = ${signMonth}
+
+  </update>
+
+  <delete id="deleteSign" parameterType="Hashmap">
+
+    delete from sign_tb
+    where sign_idx  = ${sign_idx}
+    and   signMonth = ${signMonth}
+
+  </delete>
+
+</mapper>

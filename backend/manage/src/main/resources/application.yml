@@ -1,0 +1,47 @@
+server:
+  port: 80
+spring:
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    # driver-class-name: org.mariadb.jdbc.Driver
+    # url: jdbc:mariadb://localhost:3305/resource?characterEncoding=UTF-8
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mariadb://localhost:3305/resource?characterEncoding=UTF-8
+    username: root
+    password: 12345
+
+  jpa:
+    database-Platform: org.hibernate.dialect.MariaDBDialect
+    properties:
+      hibernate:
+        format-sql: true
+        show-sql: true
+        highlight_sql: true
+        use_sql_comments: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql: trace
+# logging:
+#   level:
+#     root: INFO
+#     ucube.com.manage.mapper: TRACE
+
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-handlers-package: ucube.com.manage.mapper.typehandler
+  type-aliases-package: ucube.com.manage.model
+
+

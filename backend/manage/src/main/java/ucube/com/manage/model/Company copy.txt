@@ -1,0 +1,59 @@
+package ucube.com.manage.model;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity(name = "Company")
+@Table(name = "project_bp_tb")
+@IdClass(CompanyId.class)
+public class Company implements Serializable {
+
+  @Id
+  @Column(name = "company_id")
+  private String pjtNo;
+
+  @Id
+  @Column(name = "company_id")
+  private String company;
+
+  @Column(name = "startDt")
+  private String startDt;
+
+  @Column(name = "endDt")
+  private String endDt;
+
+  @Column(name = "term")
+  private String term;
+
+  @Column(name = "leader")
+  private String leader;
+
+  @Column(name = "position")
+  private String position;
+
+  @Column(name = "totMm")
+  private BigDecimal totMm;
+
+  @Column(name = "totAmt")
+  private BigDecimal totAmt;
+
+  @Column(name = "regdt")
+  private LocalDateTime regdt;
+
+  @Column(name = "updt")
+  private LocalDateTime updt;
+
+}

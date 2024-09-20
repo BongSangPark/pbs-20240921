@@ -1,0 +1,15 @@
+package ucube.com.manage.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import ucube.com.manage.model.Company;
+import ucube.com.manage.model.CompanyId;
+
+@Repository
+public interface CompanyRepository extends JpaRepository<Company, CompanyId> {
+   List<Company> findByCompanyContains(String CompanyId);
+
+}
