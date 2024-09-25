@@ -1,0 +1,112 @@
+회사 프로젝트 자원관리(Resource) Table
+
+create table project_tb (
+
+pjtNo varchar(10) not null primary key,
+pjtNm varchar(100) not null,
+orderOrg varchar(100) not null,
+startDt varchar(8) not null,
+endDt varchar(8) not null,
+term varchar(3) not null,
+pm varchar(20) not null,
+position varchar(20) null,
+totMm decimal DEFAULT 0,
+totAmt decimal DEFAULT 0,
+regdt DATETIME DEFAULT CURRENT_TIMESTAMP,
+updt DATETIME DEFAULT CURRENT_TIMESTAMP
+
+);
+
+
+create table company_tb (
+
+companyNo varchar(10) not null primary key,
+companyNm varchar(100) not null,
+leader varchar(20) not null,
+companyTel varchar(10) null,
+companyAddr varchar(100) null,
+salesLeader varchar(20) null,
+position varchar(20) null,
+salesTel varchar(11) null,
+regdt DATETIME DEFAULT CURRENT_TIMESTAMP,
+updt DATETIME DEFAULT CURRENT_TIMESTAMP
+
+);
+
+
+create table contract_tb (
+pjtNo varchar(10) not null,
+companyNo varchar(10) not null,
+contract_idx int not null,
+bpPerson varchar(20) not null,
+grade varchar(10) not null,
+birth varchar(4) not null,
+stratDt varchar(8) not null,
+endDt varchar(8) not null,
+contractmm varchar(8) not null,
+price decimal(15, 3) default 0,
+sumprice decimal(15, 3) default 0,
+regdt DATETIME DEFAULT CURRENT_TIMESTAMP,
+updt DATETIME DEFAULT CURRENT_TIMESTAMP,
+primary key (pjtNo, companyNo, contract_idx)
+);
+
+create table real_tb (
+pjtNo varchar(10) not null,
+realmonth varchar(6) not null,
+companyNo varchar(10) not null,
+real_idx int not null,
+bpPerson varchar(20) not null,
+grade varchar(10) not null,
+birth varchar(4) not null,
+company varchar(30) not null,
+stratDt varchar(8) not null,
+endDt varchar(8) not null,
+realmm varchar(5) not null,
+regdt DATETIME DEFAULT CURRENT_TIMESTAMP,
+updt DATETIME DEFAULT CURRENT_TIMESTAMP,
+primary key (pjtNo, realmonth, companyNo, real_idx)
+);
+
+create table sign_tb (
+pjtNo varchar(10) not null,
+signmonth varchar(6) not null,
+companyNo varchar(10) not null,
+sign_idx int not null,
+bpPerson varchar(20) not null,
+grade varchar(10) not null,
+birth varchar(4) not null,
+company varchar(30) not null,
+stratDt varchar(8) not null,
+endDt varchar(8) not null,
+signnmm varchar(5) not null,
+price decimal(15, 3) default 0,
+sumprice decimal(15, 3) default 0,
+regdt DATETIME DEFAULT CURRENT_TIMESTAMP,
+updt DATETIME DEFAULT CURRENT_TIMESTAMP,
+primary key (pjtNo, signmonth, companyNo, sign_idx)
+);
+
+
+spring:
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3305/resource?characterEncoding=UTF-8
+    username: root
+    password: 12345
+
+  jpa:
+    database-Platform: org.hibernate.dialect.MariaDBDialect
+    properties:
+      hibernate:
+        format-sql: true
+        show-sql: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
