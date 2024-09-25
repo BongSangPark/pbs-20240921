@@ -91,7 +91,7 @@ const CompanyList = () => {
               <tr key={company.companyNo}>
                 <td>
                   <Link to={`/company/list/${company.companyNo}`}>
-                    {company.companyNo}
+                    {company.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}
                   </Link>
                 </td>
                 <td align="left">{company.companyNm}</td>

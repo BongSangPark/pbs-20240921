@@ -1,0 +1,115 @@
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+
+const ProjectMonitoringAssign = (props) => {
+  const [assign, setAssign] = useState([]);
+  const pjtNo = props.pjtNo;
+  const companyNo = props.companyNo;
+
+  useEffect(() => {
+    AssignMonitoring(pjtNo, companyNo);
+  }, [pjtNo, companyNo]);
+
+  const AssignMonitoring = (pjtNo) => {
+    let url = "http://localhost/monitor/assignlist/" + pjtNo + "/" + companyNo;
+
+
+    fetch(url)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          setAssign("");
+          //alert("AssignMonitoring 데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setAssign(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  return (
+    <div
+      style={{
+        width: "28%",
+        height: "300px",
+        border: "1px solid black",
+      }}
+    >
+      <table
+        className="table table-striped table-bordered table table-condensed"
+        style={{ width: "100%", fontSize: "75%" }}
+      >
+        <thead>
+          <tr>
+            <td
+              align="center"
+              colSpan={6}
+              className="bg-secondary-subtle scope-col"
+              style={{ width: "100%" }}
+            >
+              <b>BP사 실투입</b>
+            </td>
+          </tr>
+          <tr align="center">
+            <th
+              cassName="bg-secondary-subtle scope-col input-80-C"
+              style={{ width: "24%", color: "blue" }}
+            >
+              BP사 명
+            </th>
+            <th
+              cassName="bg-secondary-subtle scope-col input-40-C"
+              style={{ width: "10%", color: "blue" }}
+            >
+              인력
+            </th>
+            <th
+              cassName="bg-secondary-subtle scope-col input-30-C"
+              style={{ width: "8%", color: "blue" }}
+            >
+              등급
+            </th>
+            <th
+              cassName="bg-secondary-subtle scope-col input-50-C"
+              style={{ width: "14%", color: "blue" }}
+            >
+              시작일
+            </th>
+            <th
+              cassName="bg-secondary-subtle scope-col input-50-C"
+              style={{ width: "14%", color: "blue" }}
+            >
+              종료일
+            </th>
+            <th
+              cassName="bg-secondary-subtle scope-col input-30-C"
+              style={{ width: "6%", color: "blue" }}
+            >
+              M/M
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {assign &&
+            assign.map((assign, key) => (
+              <tr key={assign.rowNum}>
+                <td align="left">{assign.companyNm}</td>
+                <td>{assign.bpPerson}</td>
+                <td>{assign.grade}</td>
+                <td>{assign.startDt}</td>
+                <td>{assign.endDt}</td>
+                <td>{assign.assignMm}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default ProjectMonitoringAssign;

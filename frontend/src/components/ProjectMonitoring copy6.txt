@@ -110,15 +110,13 @@ const ProjectMonitoring = () => {
   };
 
   const selectContent = (pjtNo, companyNo) => {
-    setPjtNo("");
-    setCompanyNo("");
-    setPjtNo(pjtNo);
-    setCompanyNo(companyNo);
-    selectComponent(pjtNo, companyNo);
+    //setPjtNo(pjtNo);
+    //setCompanyNo(companyNo);
+    //selectComponent(pjtNo, companyNo);
   };
 
   function selectComponent(pjtNo, companyNo) {
-    return <ProjectMonitoringContents pjtNo={pjtNo} companyNo={companyNo} />;
+    return <ProjectMonitoringContents pjtNo={pjtNo} companyNo={companyNo} setPjtNo={setPjtNo} setCompanyNo={setCompanyNo} />;
   }
 
   return (
@@ -208,7 +206,7 @@ const ProjectMonitoring = () => {
                   {monitor.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")}
                   <label className="right-align">
                     <button type="button" class="btn btn-outline-primary btn-sm"
-                      onClick={() => { selectContent(monitor.pjtNo, monitor.companyNo); }} >
+                      onClick={() => { selectComponent(monitor.pjtNo, monitor.companyNo); }} >
                       상세
                     </button>
                   </label>
@@ -235,7 +233,7 @@ const ProjectMonitoring = () => {
         </tbody>
       </table>
       <hr />
-      <div>{pjtNo && companyNo && selectComponent(pjtNo, companyNo)}</div>
+      <div>{pjtNo && companyNo && selectComponent()}</div>
     </div>
   );
 };

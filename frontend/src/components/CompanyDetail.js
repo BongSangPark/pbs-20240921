@@ -110,7 +110,7 @@ const CompanyDetail = () => {
                   backgroundColor: "LightGray",
                 }}
                 ref={cmpNoRef}
-                value={detail.companyNo}
+                value={detail.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}
                 readOnly
               />
             </td>

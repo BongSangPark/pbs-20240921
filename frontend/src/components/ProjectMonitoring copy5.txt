@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import ProjectMonitoringContents from "./ProjectMonitoringContents";
+import ProjectMonitoringContract from "./ProjectMonitoringContract";
+import ProjectMonitoringAssign from "./ProjectMonitoringAssign";
+import ProjectMonitoringSign from "./ProjectMonitoringSign";
 
 const ProjectMonitoring = () => {
   const [project, setProject] = useState();
   const [company, setCompany] = useState();
   const [monitor, setMonitor] = useState([]);
   const mntRef = useRef([]);
-  const [pjtNo, setPjtNo] = useState("");
-  const [companyNo, setCompanyNo] = useState("");
+  const [content, setContent] = useState();
 
   const today = new Date();
   const year = today.getFullYear();
@@ -72,9 +75,6 @@ const ProjectMonitoring = () => {
 
   const monitorProjectList = () => {
     if (listCheck() === "OK") {
-      setPjtNo("");
-      setCompanyNo("");
-
       let likeRef1 = mntRef.current[0].value;
       let likeRef2 = mntRef.current[1].value;
       let likeRef3 = mntRef.current[2].value;
@@ -109,17 +109,15 @@ const ProjectMonitoring = () => {
     }
   };
 
-  const selectContent = (pjtNo, companyNo) => {
-    setPjtNo("");
-    setCompanyNo("");
-    setPjtNo(pjtNo);
-    setCompanyNo(companyNo);
-    selectComponent(pjtNo, companyNo);
+  const handleClickButton = (e) => {
+    setContent(e.target);
   };
 
-  function selectComponent(pjtNo, companyNo) {
-    return <ProjectMonitoringContents pjtNo={pjtNo} companyNo={companyNo} />;
-  }
+  const selectComponent = {
+    <ProjectMonitoringContract pjtNo={pjtNo} companyNo={companyNo} />,
+    <ProjectMonitoringAssign pjtNo={pjtNo} companyNo={companyNo} />,
+    <ProjectMonitoringSign pjtNo={pjtNo} companyNo={companyNo} />,
+  };
 
   return (
     <div className="container-fluid">
@@ -149,7 +147,7 @@ const ProjectMonitoring = () => {
         {project &&
           project.map((item, key) => (
             <option key={item.pjtNo} value={item.pjtNo}>
-              [ {item.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")} ] {item.pjtNm}
+              [ {item.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')} ] {item.pjtNm}
             </option>
           ))}
       </select>
@@ -167,8 +165,7 @@ const ProjectMonitoring = () => {
         {company &&
           company.map((item, key) => (
             <option key={item.companyNo} value={item.companyNo}>
-              [ {item.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, "$1-$2-$3")} ]{" "}
-              {item.companyNm}
+              [ {item.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')} ] {item.companyNm}
             </option>
           ))}
       </select>
@@ -178,7 +175,7 @@ const ProjectMonitoring = () => {
       </button>
       &nbsp;
       <label style={{ fontSize: "12pt" }}>
-        (자료조회 및 상세버튼을 클릭하여 Monitoring 상세내역을 확인하세요!)
+        (자료 조회 및 프로젝트를 선택하여 Monitoring 상세내역을 확인하세요!)
       </label>
       <hr />
       <table
@@ -203,17 +200,15 @@ const ProjectMonitoring = () => {
         <tbody>
           {monitor &&
             monitor.map((monitor, key) => (
-              <tr key={monitor.rowNum}>
-                <td>
-                  {monitor.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")}
-                  <label className="right-align">
-                    <button type="button" class="btn btn-outline-primary btn-sm"
-                      onClick={() => { selectContent(monitor.pjtNo, monitor.companyNo); }} >
-                      상세
-                    </button>
-                  </label>
+              <tr key={monitor.pjtNo}>
+                <td onClick=handleClickButton({monitor.pjtNo}, {monitor.companyNo})>
+                  <Link
+                    to={`/monitor/listcontents/${monitor.pjtNo}/${monitor.companyNo}`}
+                  >
+                    {monitor.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')}
+                  </Link>
                 </td>
-                <td>{monitor.pjtNm}</td>
+                <td align="left">{monitor.pjtNm}</td>
                 <td>{monitor.orderOrg}</td>
                 <td>{monitor.startDt}</td>
                 <td>{monitor.endDt}</td>
@@ -223,19 +218,16 @@ const ProjectMonitoring = () => {
                 <td>{monitor.term}</td>
                 <td>{monitor.totMm}</td>
                 <td align="right">{monitor.totAmt.toLocaleString("ko-KR")}</td>
-                <td>
-                  {monitor.companyNo.replace(
-                    /(\d{3})(\d{2})(\d{5})/,
-                    "$1-$2-$3"
-                  )}
-                </td>
+                <td>{monitor.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}</td>
                 <td>{monitor.companyNm}</td>
               </tr>
             ))}
         </tbody>
       </table>
       <hr />
-      <div>{pjtNo && companyNo && selectComponent(pjtNo, companyNo)}</div>
+      <div>
+        {content && <Content>{selectComponent[content]}</Content>}
+      </div>
     </div>
   );
 };

@@ -93,7 +93,7 @@ const ProjectList = () => {
               <tr key={project.pjtNo}>
                 <td>
                   <Link to={`/project/list/${project.pjtNo}`}>
-                    {project.pjtNo}
+                    {project.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')}
                   </Link>
                 </td>
                 <td align="left">{project.pjtNm}</td>

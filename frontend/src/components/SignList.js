@@ -169,11 +169,11 @@ const SignList = () => {
                 <td align="center">{sign.signMonth}</td>
                 <td>
                   <Link to={`/sign/list/${sign.sign_idx}/${sign.signMonth}`}>
-                    {sign.pjtNo}
+                    {sign.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')}
                   </Link>
                 </td>
                 <td align="left">{sign.pjtNm}</td>
-                <td>{sign.companyNo}</td>
+                <td>{sign.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}</td>
                 <td align="left">{sign.companyNm}</td>
                 <td>{sign.bpPerson}</td>
                 <td>{sign.grade}</td>

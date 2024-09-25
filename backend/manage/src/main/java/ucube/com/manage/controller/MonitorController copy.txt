@@ -1,0 +1,99 @@
+package ucube.com.manage.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import ucube.com.manage.model.Monitor;
+import ucube.com.manage.service.MonitorService;
+
+@CrossOrigin("*")
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/monitor")
+@Slf4j
+public class MonitorController {
+
+  private final MonitorService monitorService;
+
+  private HashMap<String, Object> map = new HashMap<String, Object>();
+
+  // 전체 조회
+  // @GetMapping("/list/{signMonth}/{pjtNo}/{companyNo}")
+  // @GetMapping("/list/{signMonth}/{pjtNo}")
+  // public ResponseEntity<?> findAll(@PathVariable("signMonth") String signMonth,
+  // @PathVariable("pjtNo") String pjtNo, @PathVariable("companyNo") String
+  // companyNo) {
+  // public ResponseEntity<?> findAll(@PathVariable("signMonth") String signMonth, @PathVariable("pjtNo") String pjtNo) {
+
+    // System.out.println("signMonth ==>" + signMonth);
+    // System.out.println("pjtNo ==>" + pjtNo);
+    // System.out.println("companyNo ==>" + companyNo);
+
+    // map.put("list signMonth", signMonth);
+    // map.put("list pjtNo", pjtNo);
+    // map.put("list companyNo", companyNo);
+
+
+
+    // try {
+    //   List<Monitor> list = monitorService.monitorList(signMonth);
+
+    //   if (list.isEmpty() || list.size() == 0) {
+    //    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    //   }
+    //   return new ResponseEntity<>(list, HttpStatus.OK);
+    // } catch (Exception e) {
+    //   return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+  }
+
+  // 상세 조회
+  // @GetMapping("/list/{sign_idx}/{signMonth}")
+  // public ResponseEntity<?> findDetail(@PathVariable("sign_idx") String
+  // sign_idx, @PathVariable("signMonth") String signMonth) {
+  // map.put("sign_idx", sign_idx);
+  // map.put("signMonth", signMonth);
+
+  // Optional<Monitor> sign = monitorService.signQuery(map);
+  // if (sign.isPresent()) {
+  // return new ResponseEntity<>(sign.get(), HttpStatus.OK);
+  // }
+  // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  // }
+
+  // like 조회
+  @GetMapping("/like")
+  public ResponseEntity<?> findLikeProject(@RequestParam("signMonth") String signMonth,
+      @RequestParam("pjtNo") String pjtNo, @RequestParam("companyNo") String companyNo) {
+
+    System.out.println("like signMonth=>" + signMonth);
+    System.out.println("like pjtNo=>" + pjtNo);
+    System.out.println("like companyNo=>" + companyNo);
+
+    map.put("signMonth", signMonth);
+    map.put("pjtNo", pjtNo);
+    map.put("companyNo", companyNo);
+
+    try {
+      List<Monitor> list = monitorService.monitorList(map);
+      if (list.isEmpty() || list.size() == 0) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(list, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+}

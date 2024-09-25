@@ -115,7 +115,7 @@ const AssignList = () => {
         {project &&
           project.map((item, key) => (
             <option key={item.pjtNo} value={item.pjtNo}>
-              [ {item.pjtNo} ] {item.pjtNm}
+              [ {item.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')} ] {item.pjtNm}
             </option>
           ))}
       </select>
@@ -169,11 +169,11 @@ const AssignList = () => {
                 <td align="center">{assign.assignMonth}</td>
                 <td>
                   <Link to={`/assign/list/${assign.assign_idx}/${assign.assignMonth}`}>
-                    {assign.pjtNo}
+                    {assign.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')}
                   </Link>
                 </td>
                 <td align="left">{assign.pjtNm}</td>
-                <td>{assign.companyNo}</td>
+                <td>{assign.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}</td>
                 <td align="left">{assign.companyNm}</td>
                 <td>{assign.bpPerson}</td>
                 <td>{assign.grade}</td>

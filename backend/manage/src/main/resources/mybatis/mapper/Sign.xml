@@ -4,26 +4,6 @@
 
 <mapper namespace="ucube.com.manage.mapper.SignMapper">
 
-  <select id="listProject" resultType="ProjectInfo">
-
-    select  pjtNo,
-            pjtNm
-    from  project_tb
-    group by pjtNo
-    order by pjtNo asc
-
-  </select>
-
-  <select id="listCompany" resultType="ProjectInfo">
-
-    select  companyNo,
-            companyNm
-    from  company_tb
-    group by companyNo
-    order by companyNo asc
-
-  </select>
-
   <insert id="saveSign">
 
     insert into sign_tb (pjtNo, companyNo, signMonth, bpPerson, grade, birth, startDt, endDt, signMm, price, sumPrice)

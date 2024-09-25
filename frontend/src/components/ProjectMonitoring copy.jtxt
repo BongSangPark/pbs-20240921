@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import ProjectMonitoringContents from "./ProjectMonitoringContents";
+import { Link } from "react-router-dom";
 
 const ProjectMonitoring = () => {
   const [project, setProject] = useState();
   const [company, setCompany] = useState();
   const [monitor, setMonitor] = useState([]);
+  const [monitorDetail, setMonitorDetail] = useState();
   const mntRef = useRef([]);
-  const [pjtNo, setPjtNo] = useState("");
-  const [companyNo, setCompanyNo] = useState("");
 
   const today = new Date();
   const year = today.getFullYear();
@@ -29,7 +28,7 @@ const ProjectMonitoring = () => {
         if (Res.status === 200) {
           return Res.json();
         } else if (Res.status === 204) {
-          alert("프로젝트 List 데이터가 존재하지 않습니다.");
+          alert("데이터가 존재하지 않습니다.");
           throw Error("데이터가 데이터가 존재하지 않습니다.");
         }
       })
@@ -49,7 +48,7 @@ const ProjectMonitoring = () => {
         if (Res.status === 200) {
           return Res.json();
         } else if (Res.status === 204) {
-          alert("BP사 List 데이터가 존재하지 않습니다.");
+          alert("데이터가 존재하지 않습니다.");
           throw Error("데이터가 데이터가 존재하지 않습니다.");
         }
       })
@@ -72,9 +71,6 @@ const ProjectMonitoring = () => {
 
   const monitorProjectList = () => {
     if (listCheck() === "OK") {
-      setPjtNo("");
-      setCompanyNo("");
-
       let likeRef1 = mntRef.current[0].value;
       let likeRef2 = mntRef.current[1].value;
       let likeRef3 = mntRef.current[2].value;
@@ -89,13 +85,15 @@ const ProjectMonitoring = () => {
         "&companyNo=" +
         likeRef3;
 
+      console.log("listUrl ==>", listUrl);
+
       fetch(listUrl)
         .then((Res) => {
           if (Res.status === 200) {
             return Res.json();
           } else if (Res.status === 204) {
             setMonitor("");
-            alert("monitorProjectList 데이터가 존재하지 않습니다.");
+            alert("데이터가 존재하지 않습니다.");
             throw Error("데이터가 데이터가 존재하지 않습니다.");
           }
         })
@@ -109,22 +107,31 @@ const ProjectMonitoring = () => {
     }
   };
 
-  const selectContent = (pjtNo, companyNo) => {
-    setPjtNo("");
-    setCompanyNo("");
-    setPjtNo(pjtNo);
-    setCompanyNo(companyNo);
-    selectComponent(pjtNo, companyNo);
-  };
+  const ProjectCheckMonitoring = () => {
+    let url = "http://localhost/monitor/list/" + mntRef.current[0].value;
 
-  function selectComponent(pjtNo, companyNo) {
-    return <ProjectMonitoringContents pjtNo={pjtNo} companyNo={companyNo} />;
-  }
+    fetch(url)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          setMonitor("");
+          alert("데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setMonitor(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
 
   return (
     <div className="container-fluid">
       <h4 className="text-center">
-        프로젝트 계약-투입-검수 통합 Monitoring입니다
+        프로젝트 게약-투입-검수 통합 Monitoring입니다
       </h4>
       <hr />
       <b>검수기준월 :</b>
@@ -149,7 +156,7 @@ const ProjectMonitoring = () => {
         {project &&
           project.map((item, key) => (
             <option key={item.pjtNo} value={item.pjtNo}>
-              [ {item.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")} ] {item.pjtNm}
+              [ {item.pjtNo} ] {item.pjtNm}
             </option>
           ))}
       </select>
@@ -167,8 +174,7 @@ const ProjectMonitoring = () => {
         {company &&
           company.map((item, key) => (
             <option key={item.companyNo} value={item.companyNo}>
-              [ {item.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, "$1-$2-$3")} ]{" "}
-              {item.companyNm}
+              [ {item.companyNo} ] {item.companyNm}
             </option>
           ))}
       </select>
@@ -178,7 +184,7 @@ const ProjectMonitoring = () => {
       </button>
       &nbsp;
       <label style={{ fontSize: "12pt" }}>
-        (자료조회 및 상세버튼을 클릭하여 Monitoring 상세내역을 확인하세요!)
+        (자료 조회 및 프로젝트를 선택하여 Monitoring 상세내역을 확인하세요!)
       </label>
       <hr />
       <table
@@ -190,30 +196,26 @@ const ProjectMonitoring = () => {
             <th className="bg-secondary-subtle scope-col">프로젝트 No</th>
             <th className="bg-secondary-subtle scope-col">프로젝트 명</th>
             <th className="bg-secondary-subtle scope-col">발주기관</th>
-            <th className="bg-secondary-subtle scope-col">프로젝트시작일</th>
-            <th className="bg-secondary-subtle scope-col">프로젝트종료일</th>
+            <th className="bg-secondary-subtle scope-col">시작일</th>
+            <th className="bg-secondary-subtle scope-col">종료일</th>
             <th className="bg-secondary-subtle scope-col">PM</th>
             <th className="bg-secondary-subtle scope-col">기간(개월)</th>
             <th className="bg-secondary-subtle scope-col">총 M/M</th>
             <th className="bg-secondary-subtle scope-col">수주금액</th>
-            <th className="bg-secondary-subtle scope-col">사업자 등록번호</th>
-            <th className="bg-secondary-subtle scope-col">BP사</th>
           </tr>
         </thead>
         <tbody>
           {monitor &&
             monitor.map((monitor, key) => (
-              <tr key={monitor.rowNum}>
+              <tr key={monitor.pjtNo}>
                 <td>
-                  {monitor.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")}
-                  <label className="right-align">
-                    <button type="button" class="btn btn-outline-primary btn-sm"
-                      onClick={() => { selectContent(monitor.pjtNo, monitor.companyNo); }} >
-                      상세
-                    </button>
-                  </label>
+                  <Link
+                    to={`/monitor/list/${monitor.monitorMonth}/${monitor.pjtNo}`}
+                  >
+                    {monitor.pjtNo}
+                  </Link>
                 </td>
-                <td>{monitor.pjtNm}</td>
+                <td align="left">{monitor.pjtNm}</td>
                 <td>{monitor.orderOrg}</td>
                 <td>{monitor.startDt}</td>
                 <td>{monitor.endDt}</td>
@@ -223,19 +225,106 @@ const ProjectMonitoring = () => {
                 <td>{monitor.term}</td>
                 <td>{monitor.totMm}</td>
                 <td align="right">{monitor.totAmt.toLocaleString("ko-KR")}</td>
-                <td>
-                  {monitor.companyNo.replace(
-                    /(\d{3})(\d{2})(\d{5})/,
-                    "$1-$2-$3"
-                  )}
-                </td>
-                <td>{monitor.companyNm}</td>
               </tr>
             ))}
         </tbody>
       </table>
       <hr />
-      <div>{pjtNo && companyNo && selectComponent(pjtNo, companyNo)}</div>
+      <table
+        className="table table-striped table-bordered table table-condensed"
+        style={{ fontSize: "90%" }}
+      >
+        <tbody>
+          <tr align="center">
+            <th className="bg-secondary-subtle scope-col">BP사 명</th>
+            <th className="bg-secondary-subtle scope-col">계약인력</th>
+            <th className="bg-secondary-subtle scope-col">등급</th>
+            <th className="bg-secondary-subtle scope-col">계약시작일</th>
+            <th className="bg-secondary-subtle scope-col">계약종료일</th>
+            <th className="bg-secondary-subtle scope-col">게약M/M</th>
+            <th className="bg-secondary-subtle scope-col">계약단가</th>
+            <th className="bg-secondary-subtle scope-col">계약금액</th>
+            <th
+              className="bg-secondary-subtle scope-col"
+              style={{ color: "blue" }}
+            >
+              투입인력
+            </th>
+            <th
+              className="bg-secondary-subtle scope-col"
+              style={{ color: "blue" }}
+            >
+              등급
+            </th>
+            <th
+              className="bg-secondary-subtle scope-col"
+              style={{ color: "blue" }}
+            >
+              투입시작일
+            </th>
+            <th
+              className="bg-secondary-subtle scope-col"
+              style={{ color: "blue" }}
+            >
+              투입종료일
+            </th>
+            <th
+              className="bg-secondary-subtle scope-col"
+              style={{ color: "blue" }}
+            >
+              실투입M/M
+            </th>
+            <th
+              className="bg-secondary-subtle scope-col"
+              style={{ color: "red" }}
+            >
+              검수인력
+            </th>
+            <th
+              className="bg-secondary-subtle scope-col"
+              style={{ color: "red" }}
+            >
+              등급
+            </th>
+            <th
+              className="bg-secondary-subtle scope-col"
+              style={{ color: "red" }}
+            >
+              검수시작일
+            </th>
+            <th
+              className="bg-secondary-subtle scope-col"
+              style={{ color: "red" }}
+            >
+              검수종료일
+            </th>
+            <th
+              className="bg-secondary-subtle scope-col"
+              style={{ color: "red" }}
+            >
+              검수M/M
+            </th>
+          </tr>
+        </tbody>
+        {/* <tbody align="center">
+          {monitor &&
+            monitor.map((monitor, key) => (
+              <tr key={monitor.monitor_idx}>
+                <td align="center">{monitor.monitorMonth}</td>
+                <td>
+                  <Link to={`/monitor/list/${monitor.monitor_idx}/${monitor.monitorMonth}`}>
+                    {monitor.pjtNo}
+                  </Link>
+                </td>
+                <td align="left">{monitor.pjtNm}</td>
+                <td>{monitor.companyNo}</td>
+                <td align="left">{monitor.companyNm}</td>
+                <td>{monitor.bpPerson}</td>
+                <td>{monitor.grade}</td>
+              </tr>
+            ))}
+        </tbody> */}
+      </table>
     </div>
   );
 };

@@ -189,7 +189,7 @@ const ContractDetail = () => {
             >
               사업자 등록번호
             </th>
-            <td>{detail.companyNo}</td>
+            <td>{detail.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}</td>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"

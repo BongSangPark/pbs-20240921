@@ -198,7 +198,7 @@ const ContractSave = () => {
                 {project &&
                   project.map((item, key) => (
                     <option key={item.pjtNo} value={item.pjtNo}>
-                      [ {item.pjtNo} ] {item.pjtNm}
+                      [ {item.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')} ] {item.pjtNm}
                     </option>
                   ))}
               </select>
@@ -222,7 +222,7 @@ const ContractSave = () => {
                 {company &&
                   company.map((item) => (
                     <option key={item.companyNo} value={item.companyNo}>
-                      [ {item.companyNo} ] {item.companyNm}
+                      [ {item.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')} ] {item.companyNm}
                     </option>
                   ))}
               </select>

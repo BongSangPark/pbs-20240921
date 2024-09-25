@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ucube.com.manage.mapper.MonitorMapper">
+
+  <select id="listMonitor" parameterType="Hashmap" resultType="Monitor">
+
+    select  @ROWNUM:=@ROWNUM+1 AS rowNum,
+            b.signMonth   signMonth,
+            a.pjtNo       pjtNo,
+            a.pjtNm       pjtNm,
+            a.orderOrg    orderOrg,
+            STR_TO_DATE(a.startDt, "%Y%m%d")     startDt,
+            STR_TO_DATE(a.endDt, "%Y%m%d")       endDt,
+            a.term        term,
+            a.pm          pm,
+            a.position    position,
+            a.totMm       totMm,
+            a.totAmt      totAmt,
+            b.companyNo		companyNo,
+            c.companyNm		companyNm
+    from  project_tb  a,
+          sign_tb     b,
+          company_tb  c,
+          (SELECT @ROWNUM:=0) AS R
+    where a.pjtNo     LIKE concat('%', #{pjtNo}, '%')
+    and   b.companyNo LIKE concat('%', #{companyNo}, '%')
+    and   a.pjtNo     = b.pjtNo
+    and   b.signMonth = #{signMonth}
+    and	  b.companyNo = c.companyNo
+    group by  b.signMonth,
+              a.pjtNo,
+              a.pjtNm,
+              a.orderOrg,
+              a.startDt,
+              a.endDt,
+              a.term,
+              a.pm,
+              a.position,
+              a.totMm,
+              a.totAmt,
+              b.companyNo,
+              c.companyNm
+    order by b.signMonth, a.pjtNo asc, c.companyNm asc, a.startDt asc, a.totAmt desc
+
+  </select>
+
+  <select id="listBpContract" parameterType="Hashmap" resultType="Monitor">
+
+    select  @ROWNUM:=@ROWNUM+1 AS rowNum,
+            a.pjtNo       pjtNo,
+            b.companyNm   companyNm,
+            a.bpPerson    bpPerson,
+            a.grade        grade,
+            STR_TO_DATE(a.startDt, "%Y%m%d")     startDt,
+            STR_TO_DATE(a.endDt, "%Y%m%d")       endDt,
+            a.contractMm  contractMm,
+            a.price       price,
+            a.sumPrice    sumPrice
+    from  contract_tb a,
+          company_tb  b,
+          (SELECT @ROWNUM:=0) AS R
+    where a.pjtNo     = #{pjtNo}
+    and   a.companyNo = #{companyNo}
+    and	  a.companyNo = b.companyNo
+    group by  a.pjtNo,
+              b.companyNm,
+              a.bpPerson,
+              a.grade,
+              a.startDt,
+              a.endDt,
+              a.contractMm,
+              a.price,
+              a.sumPrice
+    order by b.companyNm asc, a.bpPerson asc
+
+  </select>
+
+  <select id="listBpAssign" parameterType="String" resultType="Monitor">
+
+    select  @ROWNUM:=@ROWNUM+1 AS rowNum,
+            a.pjtNo       pjtNo,
+            b.companyNm   companyNm,
+            a.bpPerson    bpPerson,
+            a.grade        grade,
+            STR_TO_DATE(a.startDt, "%Y%m%d")     startDt,
+            STR_TO_DATE(a.endDt, "%Y%m%d")       endDt,
+            a.assignMm    assignMm
+    from  assign_tb   a,
+          company_tb  b,
+          (SELECT @ROWNUM:=0) AS R
+    where a.pjtNo     = #{pjtNo}
+    and   a.companyNo = #{companyNo}
+    and	  a.companyNo = b.companyNo
+    group by  a.pjtNo,
+              b.companyNm,
+              a.bpPerson,
+              a.grade,
+              a.startDt,
+              a.endDt,
+              a.assignMm
+    order by b.companyNm asc, a.bpPerson asc
+
+  </select>
+
+  <select id="listBpSign" parameterType="String" resultType="Monitor">
+
+    select  @ROWNUM:=@ROWNUM+1 AS rowNum,
+            a.pjtNo       pjtNo,
+            b.companyNm   companyNm,
+            a.bpPerson    bpPerson,
+            a.grade        grade,
+            STR_TO_DATE(a.startDt, "%Y%m%d")     startDt,
+            STR_TO_DATE(a.endDt, "%Y%m%d")       endDt,
+            a.signMm      signMm,
+            a.price       price,
+            a.sumPrice    sumPrice
+    from  sign_tb     a,
+          company_tb  b,
+          (SELECT @ROWNUM:=0) AS R
+    where a.pjtNo     = #{pjtNo}
+    and   a.companyNo = #{companyNo}
+    and	  a.companyNo = b.companyNo
+    group by  a.pjtNo,
+              b.companyNm,
+              a.bpPerson,
+              a.grade,
+              a.startDt,
+              a.endDt,
+              a.signMm,
+              a.price,
+              a.sumPrice
+    order by b.companyNm asc, a.bpPerson asc
+
+  </select>
+
+  <select id="listBpMonitor" parameterType="Hashmap" resultType="Monitor">
+
+
+    select  c.signMonth   signMonth,
+            a.pjtNo       pjtNo,
+            a.pjtNm       pjtNm,
+            a.orderOrg    orderOrg,
+            a.startDt     startDt,
+            a.endDt       endDt,
+            a.term        term,
+            a.pm          pm,
+            a.position    position,
+            a.totMm       totMm,
+            a.totAmt      totAmt
+    from  project_tb  a,
+          company_tb  b,
+          sign_tb     c
+    where a.pjtNo     LIKE concat('%', #{pjtNo}, '%')
+    and   b.companyNo LIKE concat('%', #{companyNo}, '%')
+    and   a.pjtNo     = c.pjtNo
+    and	  b.companyNo = c.companyNo
+    and   c.signMonth = #{signMonth}
+    group by  c.signMonth,
+              a.pjtNo,
+              a.pjtNm,
+              a.orderOrg,
+              a.startDt,
+              a.endDt,
+              a.term,
+              a.pm,
+              a.position,
+              a.totMm,
+              a.totAmt
+    order by c.signMonth, a.pjtNo asc, a.startDt asc, a.totAmt desc
+
+  </select>
+
+</mapper>

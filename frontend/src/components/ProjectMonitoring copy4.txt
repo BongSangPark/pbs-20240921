@@ -1,0 +1,545 @@
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+
+const ProjectMonitoring = () => {
+  const [project, setProject] = useState();
+  const [company, setCompany] = useState();
+  const [monitor, setMonitor] = useState([]);
+  const [contract, setContract] = useState([]);
+  const [assign, setAssign] = useState([]);
+  const [sign, setSign] = useState([]);
+  const mntRef = useRef([]);
+
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth().toString().padStart(2, "0");
+  const yyyymm = `${year}${month}`;
+
+  useEffect(() => {
+    mntRef.current[0].value = yyyymm;
+    projectList();
+    companyList();
+    mntRef.current[0].focus();
+  }, []);
+
+  const projectList = () => {
+    let pjtUrl = "http://localhost/assign/projectList";
+
+    fetch(pjtUrl)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          alert("데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setProject(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  const companyList = () => {
+    let comurl = "http://localhost/assign/companyList";
+
+    fetch(comurl)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          alert("데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setCompany(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  const listCheck = () => {
+    if (mntRef.current[0].value.length !== 6) {
+      alert("검수기준월을 입력하세요.(6자리)");
+      mntRef.current[0].focus();
+      return "NO";
+    }
+    return "OK";
+  };
+
+  const monitorProjectList = () => {
+    if (listCheck() === "OK") {
+      let likeRef1 = mntRef.current[0].value;
+      let likeRef2 = mntRef.current[1].value;
+      let likeRef3 = mntRef.current[2].value;
+
+      let baseurl = "http://localhost/monitor/like";
+      let listUrl =
+        baseurl +
+        "?signMonth=" +
+        likeRef1 +
+        "&pjtNo=" +
+        likeRef2 +
+        "&companyNo=" +
+        likeRef3;
+
+      fetch(listUrl)
+        .then((Res) => {
+          if (Res.status === 200) {
+            return Res.json();
+          } else if (Res.status === 204) {
+            setMonitor("");
+            alert("데이터가 존재하지 않습니다.");
+            throw Error("데이터가 데이터가 존재하지 않습니다.");
+          }
+        })
+        .then((data) => {
+          setMonitor(data);
+          return true;
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    }
+  };
+
+  const ProjectCheckMonitoring = (pjtNo, companyNo) => {
+    //ContractMonitoring(pjtNo, companyNo);
+    //AssignMonitoring(pjtNo, companyNo);
+    //SignMonitoring(pjtNo, companyNo);
+  }
+
+  const ContractMonitoring = (pjtNo, companyNo) => {
+    let url = "http://localhost/monitor/contractlist/" + pjtNo + "/" + companyNo;
+
+    fetch(url)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          setContract("");
+          alert("데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setContract(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  const AssignMonitoring = (pjtNo, companyNo) => {
+    let url = "http://localhost/monitor/assignlist/" + pjtNo + "/" + companyNo;
+
+    fetch(url)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          setAssign("");
+          alert("데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setAssign(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  const SignMonitoring = (pjtNo, companyNo) => {
+    let url = "http://localhost/monitor/signlist/" + pjtNo + "/" + companyNo;
+
+    fetch(url)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          setSign("");
+          alert("데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setSign(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  return (
+    <div className="container-fluid">
+      <h4 className="text-center">
+        프로젝트 게약-투입-검수 통합 Monitoring입니다
+      </h4>
+      <hr />
+      <b>검수기준월 :</b>
+      &nbsp;
+      <input
+        type="text"
+        maxLength="6"
+        style={{ width: "80px", textAlign: "center" }}
+        ref={(el) => (mntRef.current[0] = el)}
+      />
+      &nbsp;
+      <b>프로젝트 :</b>
+      &nbsp;
+      <select
+        name="pjtNo"
+        ref={(el) => (mntRef.current[1] = el)}
+        style={{ width: "250px" }}
+      >
+        <option value="" defaultValue="프로젝트 선택">
+          프로젝트 선택
+        </option>
+        {project &&
+          project.map((item, key) => (
+            <option key={item.pjtNo} value={item.pjtNo}>
+              [ {item.pjtNo} ] {item.pjtNm}
+            </option>
+          ))}
+      </select>
+      &nbsp;
+      <b>BP사 :</b>
+      &nbsp;
+      <select
+        name="companyNo"
+        ref={(el) => (mntRef.current[2] = el)}
+        style={{ width: "200px" }}
+      >
+        <option value="" defaultValue="BP사 선택">
+          BP사 선택
+        </option>
+        {company &&
+          company.map((item, key) => (
+            <option key={item.companyNo} value={item.companyNo}>
+              [ {item.companyNo} ] {item.companyNm}
+            </option>
+          ))}
+      </select>
+      &nbsp;
+      <button class="btn btn-primary" onClick={monitorProjectList}>
+        조회
+      </button>
+      &nbsp;
+      <label style={{ fontSize: "12pt" }}>
+        (자료 조회 및 프로젝트를 선택하여 Monitoring 상세내역을 확인하세요!)
+      </label>
+      <hr />
+      <table
+        className="table table-striped table-bordered table table-condensed"
+        style={{ fontSize: "90%" }}
+      >
+        <thead>
+          <tr align="center">
+            <th className="bg-secondary-subtle scope-col">프로젝트 No</th>
+            <th className="bg-secondary-subtle scope-col">프로젝트 명</th>
+            <th className="bg-secondary-subtle scope-col">발주기관</th>
+            <th className="bg-secondary-subtle scope-col">프로젝트시작일</th>
+            <th className="bg-secondary-subtle scope-col">프로젝트종료일</th>
+            <th className="bg-secondary-subtle scope-col">PM</th>
+            <th className="bg-secondary-subtle scope-col">기간(개월)</th>
+            <th className="bg-secondary-subtle scope-col">총 M/M</th>
+            <th className="bg-secondary-subtle scope-col">수주금액</th>
+          </tr>
+        </thead>
+        <tbody>
+          {monitor &&
+            monitor.map((monitor, key) => (
+              <tr key={monitor.pjtNo}>
+                <td>
+                  <Link to={`/sign/list/${monitor.pjtNo}/${monitor.companyNo}`}>
+                    {monitor.pjtNo}
+                  </Link>
+                </td>
+                <td align="left">{monitor.pjtNm}</td>
+                <td>{monitor.orderOrg}</td>
+                <td>{monitor.startDt}</td>
+                <td>{monitor.endDt}</td>
+                <td>
+                  {monitor.pm} {monitor.position}
+                </td>
+                <td>{monitor.term}</td>
+                <td>{monitor.totMm}</td>
+                <td align="right">{monitor.totAmt.toLocaleString("ko-KR")}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+      <hr />
+      <div
+        style={{
+          display: "inline-block",
+          width: "40%",
+          border: "1px solid black",
+        }}
+      >
+        <table
+          className="table table-striped table-bordered table table-condensed"
+          style={{ width: "100%", fontSize: "80%" }}
+        >
+          <thead>
+            <tr>
+              <td
+                align="center"
+                colSpan={8}
+                className="bg-secondary-subtle scope-col"
+                style={{ width: "100%", fontSize: "100%" }}
+              >
+                <b>BP사 계약</b>
+              </td>
+            </tr>
+            <tr align="center">
+              <th
+                cassName="bg-secondary-subtle scope-col input-80-C"
+                style={{ width: "20%", color: "blue" }}
+              >
+                BP사 명
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-40-C"
+                style={{ width: "10%", color: "blue" }}
+              >
+                인력
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-30-C"
+                style={{ width: "8%", color: "blue" }}
+              >
+                등급
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-50-C"
+                style={{ width: "12%", color: "blue" }}
+              >
+                시작일
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-50-C"
+                style={{ width: "12%", color: "blue" }}
+              >
+                종료일
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-30-C"
+                style={{ width: "12%", color: "blue" }}
+              >
+                M/M
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-30-C"
+                style={{ width: "13%", color: "blue" }}
+              >
+                단가
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-30-C"
+                style={{ width: "13%", color: "blue" }}
+              >
+                금액
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          {contract &&
+            contract.map((contract, key) => (
+              <tr key={contract.pjtNo}>
+                <td align="left">
+                  {contract.companyNm}
+                </td>
+                <td>{contract.bpPerson}</td>
+                <td>{contract.grade}</td>
+                <td>{contract.startDt}</td>
+                <td>{contract.endDt}</td>
+                <td>{contract.contractMm}</td>
+                <td align="right">{contract.price.toLocaleString("ko-KR")}</td>
+                <td align="right">{contract.sumPrice.toLocaleString("ko-KR")}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div
+        style={{
+          display: "inline-block",
+          width: "30%",
+          border: "1px solid black",
+        }}
+      >
+        <table
+          className="table table-striped table-bordered table table-condensed"
+          style={{ width: "100%", fontSize: "80%" }}
+        >
+          <thead>
+            <tr>
+              <td
+                align="center"
+                colSpan={6}
+                className="bg-secondary-subtle scope-col"
+                style={{ width: "100%", fontSize: "100%" }}
+              >
+                <b>BP사 실투입</b>
+              </td>
+            </tr>
+            <tr align="center">
+              <th
+                cassName="bg-secondary-subtle scope-col input-80-C"
+                style={{ width: "28%", color: "blue" }}
+              >
+                BP사 명
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-40-C"
+                style={{ width: "13%", color: "blue" }}
+              >
+                인력
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-30-C"
+                style={{ width: "10%", color: "blue" }}
+              >
+                등급
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-50-C"
+                style={{ width: "16%", color: "blue" }}
+              >
+                시작일
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-50-C"
+                style={{ width: "16%", color: "blue" }}
+              >
+                종료일
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-30-C"
+                style={{ width: "17%", color: "blue" }}
+              >
+                M/M
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          {assign &&
+            assign.map((assign, key) => (
+              <tr key={assign.pjtNo}>
+                <td align="left">
+                  {assign.companyNm}
+                </td>
+                <td>{assign.bpPerson}</td>
+                <td>{assign.grade}</td>
+                <td>{assign.startDt}</td>
+                <td>{assign.endDt}</td>
+                <td>{assign.assignMm}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div
+        style={{
+          display: "inline-block",
+          width: "30%",
+          border: "1px solid black",
+        }}
+      >
+        <table
+          className="table table-striped table-bordered table table-condensed"
+          style={{ width: "100%", fontSize: "80%" }}
+        >
+          <thead>
+            <tr>
+              <td
+                align="center"
+                colSpan={8}
+                className="bg-secondary-subtle scope-col"
+                style={{ width: "100%", fontSize: "100%" }}
+              >
+                <b>BP사 검수</b>
+              </td>
+            </tr>
+            <tr align="center">
+              <th
+                cassName="bg-secondary-subtle scope-col input-80-C"
+                style={{ width: "20%", color: "red" }}
+              >
+                BP사 명
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-40-C"
+                style={{ width: "10%", color: "red" }}
+              >
+                인력
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-30-C"
+                style={{ width: "8%", color: "red" }}
+              >
+                등급
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-50-C"
+                style={{ width: "12%", color: "red" }}
+              >
+                시작일
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-50-C"
+                style={{ width: "12%", color: "red" }}
+              >
+                종료일
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-30-C"
+                style={{ width: "12%", color: "red" }}
+              >
+                M/M
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-30-C"
+                style={{ width: "13%", color: "red" }}
+              >
+                단가
+              </th>
+              <th
+                cassName="bg-secondary-subtle scope-col input-30-C"
+                style={{ width: "13%", color: "red" }}
+              >
+                금액
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          {sign &&
+            sign.map((sign, key) => (
+              <tr key={sign.pjtNo}>
+                <td align="left">
+                  {sign.companyNm}
+                </td>
+                <td>{sign.bpPerson}</td>
+                <td>{sign.grade}</td>
+                <td>{sign.startDt}</td>
+                <td>{sign.endDt}</td>
+                <td>{sign.signMm}</td>
+                <td align="right">{sign.price.toLocaleString("ko-KR")}</td>
+                <td align="right">{sign.sumPrice.toLocaleString("ko-KR")}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default ProjectMonitoring;

@@ -169,7 +169,7 @@ const ProjectDetail = () => {
                   backgroundColor: "LightGray",
                 }}
                 ref={pjtNoRef}
-                value={detail.pjtNo}
+                value={detail.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')}
                 readOnly
               />
             </td>

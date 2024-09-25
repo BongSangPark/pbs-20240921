@@ -1,13 +1,6 @@
 import { Route, Routes } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import "./App.css";
-import ProjectDetail from "./components/ProjectDetail";
-import ProjectList from "./components/ProjectList";
-import ProjectSave from "./components/ProjectSave";
-import Menu from "./menu/Menu";
-import Home from "./views/Home";
-import Main from "./views/Main";
-// import "./menu/menu.css";
 import AssignDetail from "./components/AssignDetail";
 import AssignList from "./components/AssignList";
 import AssignSave from "./components/AssignSave";
@@ -17,10 +10,17 @@ import CompanySave from "./components/CompanySave";
 import ContractDetail from "./components/ContractDetail";
 import ContractList from "./components/ContractList";
 import ContractSave from "./components/ContractSave";
+import ProjectDetail from "./components/ProjectDetail";
+import ProjectList from "./components/ProjectList";
 import ProjectMonitoring from "./components/ProjectMonitoring";
+import ProjectSave from "./components/ProjectSave";
 import SignDetail from "./components/SignDetail";
 import SignList from "./components/SignList";
 import SignSave from "./components/SignSave";
+import Menu from "./menu/Menu";
+import Home from "./views/Home";
+import Main from "./views/Main";
+import ProjectMonitoringContents from "./components/ProjectMonitoringContents";
 
 function App() {
   return (
@@ -32,6 +32,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/monitor" element={<ProjectMonitoring />} />
+          <Route
+            path="/monitor/listcontents/:pjtNo/:companyNo"
+            exact={true}
+            element={<ProjectMonitoringContents />}
+          />
           <Route path="/project/save" exact={true} element={<ProjectSave />} />
           <Route path="/project/list" exact={true} element={<ProjectList />} />
           <Route

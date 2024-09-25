@@ -144,7 +144,7 @@ const ContractList = () => {
                   </Link>
                 </td>
                 <td align="left">{contract.pjtNm}</td>
-                <td>{contract.companyNo}</td>
+                <td>{contract.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}</td>
                 <td align="left">{contract.companyNm}</td>
                 <td>{contract.leader}</td>
                 <td>{contract.bpPerson}</td>

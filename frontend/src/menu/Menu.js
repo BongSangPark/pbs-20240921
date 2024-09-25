@@ -1,8 +1,8 @@
-import "../App.css";
+import "./menu.css";
 
 const Menu = () => {
   return (
-    <div className="container">
+    <div className="container-xxl">
       <ul class="menu">
         <li>
           <a href="/">Home</a>
