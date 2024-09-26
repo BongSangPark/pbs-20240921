@@ -41,7 +41,7 @@ const ProjectMonitoringAssign = (props) => {
       }}
     >
       <table
-        className="table table-striped table-bordered table table-condensed"
+        className="table table-sm"
         style={{ width: "100%", fontSize: "75%" }}
       >
         <thead>

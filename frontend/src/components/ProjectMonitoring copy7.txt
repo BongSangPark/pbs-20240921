@@ -127,65 +127,63 @@ const ProjectMonitoring = () => {
         프로젝트 계약-투입-검수 통합 Monitoring입니다
       </h4>
       <hr />
-      <div class="form-group">
-        <b>검수기준월 :</b>
-        &nbsp;
-        <input
-          type="text"
-          maxLength="6"
-          style={{ width: "80px", textAlign: "center" }}
-          ref={(el) => (mntRef.current[0] = el)}
-        />
-        &nbsp;
-        <b>프로젝트 :</b>
-        &nbsp;
-        <select
-          name="pjtNo"
-          ref={(el) => (mntRef.current[1] = el)}
-          style={{ width: "250px" }}
-        >
-          <option value="" defaultValue="프로젝트 선택">
-            프로젝트 선택
-          </option>
-          {project &&
-            project.map((item, key) => (
-              <option key={item.pjtNo} value={item.pjtNo}>
-                [ {item.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")} ] {item.pjtNm}
-              </option>
-            ))}
-        </select>
-        &nbsp;
-        <b>BP사 :</b>
-        &nbsp;
-        <select
-          name="companyNo"
-          ref={(el) => (mntRef.current[2] = el)}
-          style={{ width: "200px" }}
-        >
-          <option value="" defaultValue="BP사 선택">
-            BP사 선택
-          </option>
-          {company &&
-            company.map((item, key) => (
-              <option key={item.companyNo} value={item.companyNo}>
-                [ {item.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, "$1-$2-$3")} ]{" "}
-                {item.companyNm}
-              </option>
-            ))}
-        </select>
-        &nbsp;
-        <button class="btn btn-primary" onClick={monitorProjectList}>
-          조회
-        </button>
-        &nbsp;
-        <label style={{ fontSize: "12pt" }}>
-          (자료조회 및 상세버튼을 클릭하여 Monitoring 상세내역을 확인하세요!)
-        </label>
-      </div>
+      <b>검수기준월 :</b>
+      &nbsp;
+      <input
+        type="text"
+        maxLength="6"
+        style={{ width: "80px", textAlign: "center" }}
+        ref={(el) => (mntRef.current[0] = el)}
+      />
+      &nbsp;
+      <b>프로젝트 :</b>
+      &nbsp;
+      <select
+        name="pjtNo"
+        ref={(el) => (mntRef.current[1] = el)}
+        style={{ width: "250px" }}
+      >
+        <option value="" defaultValue="프로젝트 선택">
+          프로젝트 선택
+        </option>
+        {project &&
+          project.map((item, key) => (
+            <option key={item.pjtNo} value={item.pjtNo}>
+              [ {item.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")} ] {item.pjtNm}
+            </option>
+          ))}
+      </select>
+      &nbsp;
+      <b>BP사 :</b>
+      &nbsp;
+      <select
+        name="companyNo"
+        ref={(el) => (mntRef.current[2] = el)}
+        style={{ width: "200px" }}
+      >
+        <option value="" defaultValue="BP사 선택">
+          BP사 선택
+        </option>
+        {company &&
+          company.map((item, key) => (
+            <option key={item.companyNo} value={item.companyNo}>
+              [ {item.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, "$1-$2-$3")} ]{" "}
+              {item.companyNm}
+            </option>
+          ))}
+      </select>
+      &nbsp;
+      <button class="btn btn-primary" onClick={monitorProjectList}>
+        조회
+      </button>
+      &nbsp;
+      <label style={{ fontSize: "12pt" }}>
+        (자료조회 및 상세버튼을 클릭하여 Monitoring 상세내역을 확인하세요!)
+      </label>
       <hr />
       <table
-        className="table table-sm"
-        style={{ fontSize: "80%" }}
+        className="table table-striped table-bordered table table-condensed"
+        style={{ fontSize: "90%" }}
       >
         <thead>
           <tr align="center">
@@ -215,7 +213,7 @@ const ProjectMonitoring = () => {
                     </button>
                   </label>
                 </td>
-                <td align="left">{monitor.pjtNm}</td>
+                <td>{monitor.pjtNm}</td>
                 <td>{monitor.orderOrg}</td>
                 <td>{monitor.startDt}</td>
                 <td>{monitor.endDt}</td>
@@ -231,7 +229,7 @@ const ProjectMonitoring = () => {
                     "$1-$2-$3"
                   )}
                 </td>
-                <td align="left">{monitor.companyNm}</td>
+                <td>{monitor.companyNm}</td>
               </tr>
             ))}
         </tbody>
