@@ -57,49 +57,49 @@ const ProjectMonitoringContract = (props) => {
           <tr align="center">
             <th
               cassName="bg-secondary-subtle scope-col input-80-C"
-              style={{ width: "22%", color: "blue" }}
+              style={{ width: "22%" }}
             >
               BP사 명
             </th>
             <th
               cassName="bg-secondary-subtle scope-col input-40-C"
-              style={{ width: "9%", color: "blue" }}
+              style={{ width: "9%" }}
             >
               인력
             </th>
             <th
               cassName="bg-secondary-subtle scope-col input-30-C"
-              style={{ width: "8%", color: "blue" }}
+              style={{ width: "8%" }}
             >
               등급
             </th>
             <th
               cassName="bg-secondary-subtle scope-col input-50-C"
-              style={{ width: "13%", color: "blue" }}
+              style={{ width: "13%" }}
             >
               시작일
             </th>
             <th
               cassName="bg-secondary-subtle scope-col input-50-C"
-              style={{ width: "13%", color: "blue" }}
+              style={{ width: "13%" }}
             >
               종료일
             </th>
             <th
               cassName="bg-secondary-subtle scope-col input-30-C"
-              style={{ width: "8%", color: "blue" }}
+              style={{ width: "8%" }}
             >
               M/M
             </th>
             <th
               cassName="bg-secondary-subtle scope-col input-30-C"
-              style={{ width: "12%", color: "blue" }}
+              style={{ width: "12%" }}
             >
               단가
             </th>
             <th
               cassName="bg-secondary-subtle scope-col input-30-C"
-              style={{ width: "13%", color: "blue" }}
+              style={{ width: "13%" }}
             >
               금액
             </th>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import Item from "../menu/Item";
 
 const AssignSave = () => {
   const asnRef = useRef([]);
@@ -22,6 +23,8 @@ const AssignSave = () => {
   const year = today.getFullYear();
   const month = (today.getMonth()).toString().padStart(2, "0");
   const yyyymm = `${year}${month}`;
+
+  const text = "Home > 인력투입 관리 > 실투입 등록";
 
   const Grade = [
     { grade: "특급" },
@@ -156,7 +159,7 @@ const AssignSave = () => {
 
   return (
     <div className="div">
-      <h4 className="text-center">인력 실투입 등록입니다</h4>
+      <div><Item item={text} /></div>
       <hr />
       <table class="table table-bordered">
         <tbody>

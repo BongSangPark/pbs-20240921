@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
+import Item from "../menu/Item";
 
 const ContractDetail = () => {
   const param = useParams();
@@ -22,6 +23,8 @@ const ContractDetail = () => {
     price: 0,
     sumPrice: 0,
   });
+
+  const text = "Home > BP사 계약관리 > 계약 상세";
 
   const Grade = [
     { grade: "특급" },
@@ -165,7 +168,7 @@ const ContractDetail = () => {
 
   return (
     <div className="div">
-      <h4 className="text-center">BP사 계약 상세 내역입니다</h4>
+      <div><Item item={text} /></div>
       <hr />
       <label
         style={{ position: "relative", top: "-15px" }}

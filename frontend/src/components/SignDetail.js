@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
+import Item from "../menu/Item";
 
 const SignDetail = () => {
   const param = useParams();
@@ -24,6 +25,8 @@ const SignDetail = () => {
     price: 0,
     sumPrice: 0,
   });
+
+  const text = "Home > 인력검수 관리 > 검수 상세";
 
   const Grade = [
     { grade: "특급" },
@@ -224,7 +227,7 @@ const SignDetail = () => {
 
   return (
     <div className="div">
-      <h4 className="text-center">인력검수 상세 내역입니다</h4>
+      <div><Item item={text} /></div>
       <hr />
       <table class="table table-bordered">
         <tbody>

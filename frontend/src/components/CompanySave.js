@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Item from "../menu/Item";
 
 const CompanySave = () => {
   const bpRef = useRef([]);
@@ -14,6 +15,8 @@ const CompanySave = () => {
     position: "",
     salesTel: "",
   });
+
+  const text = "Home > BP사 관리 > BP사 등록";
 
   useEffect(() => {
     bpRef.current[0].focus();
@@ -97,12 +100,17 @@ const CompanySave = () => {
 
   return (
     <div className="div">
-      <h4 className="text-center">BP사 등록입니다</h4>
+      <div>
+        <Item item={text} />
+      </div>
       <hr />
       <table class="table table-bordered">
         <tbody>
           <tr>
-            <th align="center" className="bg-secondary-subtle scope-col input-100-C">
+            <th
+              align="center"
+              className="bg-secondary-subtle scope-col input-100-C"
+            >
               사업자 등록번호
             </th>
             <td align="left" className="input-100-L">
@@ -111,12 +119,15 @@ const CompanySave = () => {
                 maxLength="10"
                 name="companyNo"
                 ref={(el) => (bpRef.current[0] = el)}
-                style={{ width: "100%", textAlign: "center"}}
+                style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
                 placeholder="숫자만 10자리"
               />
             </td>
-            <th align="center" className="bg-secondary-subtle scope-col input-100-C">
+            <th
+              align="center"
+              className="bg-secondary-subtle scope-col input-100-C"
+            >
               BP사 명
             </th>
             <td align="left" className="input-Nm">
@@ -124,11 +135,14 @@ const CompanySave = () => {
                 type="text"
                 name="companyNm"
                 ref={(el) => (bpRef.current[1] = el)}
-                style={{ width: "100%"}}
+                style={{ width: "100%" }}
                 onChange={(e) => handleValueChange(e)}
               />
             </td>
-            <th align="center" className="bg-secondary-subtle scope-col input-100-C">
+            <th
+              align="center"
+              className="bg-secondary-subtle scope-col input-100-C"
+            >
               대표자
             </th>
             <td align="left" className="input-100-L">
@@ -136,11 +150,14 @@ const CompanySave = () => {
                 type="text"
                 name="leader"
                 ref={(el) => (bpRef.current[2] = el)}
-                style={{ width: "100%", textAlign: "center"}}
+                style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
               />
             </td>
-            <th align="center" className="bg-secondary-subtle scope-col input-100-C">
+            <th
+              align="center"
+              className="bg-secondary-subtle scope-col input-100-C"
+            >
               회사 전화번호
             </th>
             <td align="left" className="input-100-L">
@@ -149,14 +166,17 @@ const CompanySave = () => {
                 maxLength={11}
                 name="companyTel"
                 ref={(el) => (bpRef.current[3] = el)}
-                style={{ width: "100%", textAlign: "center"}}
+                style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
                 placeholder="숫자만 입력"
               />
             </td>
           </tr>
           <tr>
-            <th align="center" className="bg-secondary-subtle scope-col input-100-C">
+            <th
+              align="center"
+              className="bg-secondary-subtle scope-col input-100-C"
+            >
               영업대표
             </th>
             <td align="left" className="input-100-L">
@@ -164,11 +184,14 @@ const CompanySave = () => {
                 type="text"
                 name="salesLeader"
                 ref={(el) => (bpRef.current[4] = el)}
-                style={{ width: "100%", textAlign: "center"}}
+                style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
               />
             </td>
-            <th align="center" className="bg-secondary-subtle scope-col input-100-C">
+            <th
+              align="center"
+              className="bg-secondary-subtle scope-col input-100-C"
+            >
               주 소
             </th>
             <td align="left" className="input-Nm">
@@ -176,11 +199,14 @@ const CompanySave = () => {
                 type="text"
                 name="companyAddr"
                 ref={(el) => (bpRef.current[5] = el)}
-                style={{ width: "100%"}}
+                style={{ width: "100%" }}
                 onChange={(e) => handleValueChange(e)}
               />
             </td>
-            <th align="center" className="bg-secondary-subtle scope-col input-100-C">
+            <th
+              align="center"
+              className="bg-secondary-subtle scope-col input-100-C"
+            >
               영업직급
             </th>
             <td align="left" className="input-100-L">
@@ -188,11 +214,14 @@ const CompanySave = () => {
                 type="text"
                 name="position"
                 ref={(el) => (bpRef.current[6] = el)}
-                style={{ width: "100%", textAlign: "center"}}
+                style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
               />
             </td>
-            <th align="center" className="bg-secondary-subtle scope-col input-100-C">
+            <th
+              align="center"
+              className="bg-secondary-subtle scope-col input-100-C"
+            >
               영업 전화번호
             </th>
             <td align="left" className="input-100-L">
@@ -201,7 +230,7 @@ const CompanySave = () => {
                 name="salesTel"
                 maxLength={11}
                 ref={(el) => (bpRef.current[7] = el)}
-                style={{ width: "100%", textAlign: "center"}}
+                style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
                 placeholder="숫자만 입력"
               />

@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import Item from "../menu/Item";
 
 const ContractList = () => {
   const [project, setProject] = useState();
   const [contract, setContract] = useState([]);
   const inputRef = useRef([]);
+
+  const text = "Home > BP사 계약관리 > 계약 조회";
 
   let url = "http://localhost/contract/list";
 
@@ -82,7 +85,8 @@ const ContractList = () => {
 
   return (
     <div className="container">
-      <h4 className="text-center">BP사 계약 조회입니다</h4>
+      <div><Item item={text} /></div>
+      <hr />
       <b>프로젝트 :</b>
       &nbsp;
       <select

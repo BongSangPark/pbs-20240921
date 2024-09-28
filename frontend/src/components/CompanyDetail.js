@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
+import Item from "../menu/Item";
 
 const CompanyDetail = () => {
   const param = useParams();
@@ -16,6 +17,8 @@ const CompanyDetail = () => {
     position: "",
     salesTel: "",
   });
+
+  const text = "Home > BP사 관리 > BP사 상세";
 
   let url = "http://localhost/company/list/" + param.companyNo;
 
@@ -89,7 +92,8 @@ const CompanyDetail = () => {
 
   return (
     <div className="div">
-      <h4 className="text-center">BP사 상세 내역입니다</h4>
+      <div><Item item={text} /></div>
+      <hr />
       <table class="table table-bordered">
         <tbody>
           <tr>

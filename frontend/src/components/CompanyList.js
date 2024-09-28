@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import Item from "../menu/Item";
 
 const CompanyList = () => {
   const [company, setCompany] = useState([]);
   const cmpRef = useRef();
+
+  const text = "Home > BP사 관리 > BP사 조회";
 
   let url = "http://localhost/company/list";
 
@@ -54,7 +57,8 @@ const CompanyList = () => {
 
   return (
     <div className="container">
-      <h4 className="text-center">BP사 조회입니다</h4>
+      <div><Item item={text} /></div>
+      <hr />
       <b>BP사 명 :</b>
       &nbsp;
       <input

@@ -13,6 +13,7 @@ import ContractSave from "./components/ContractSave";
 import ProjectDetail from "./components/ProjectDetail";
 import ProjectList from "./components/ProjectList";
 import ProjectMonitoring from "./components/ProjectMonitoring";
+import ProjectMonitoringContents from "./components/ProjectMonitoringContents";
 import ProjectSave from "./components/ProjectSave";
 import SignDetail from "./components/SignDetail";
 import SignList from "./components/SignList";
@@ -20,14 +21,14 @@ import SignSave from "./components/SignSave";
 import Menu from "./menu/Menu";
 import Home from "./views/Home";
 import Main from "./views/Main";
-import ProjectMonitoringContents from "./components/ProjectMonitoringContents";
 
-function App() {
+function App(props) {
   return (
     <div className="App">
       <Main />
-      <hr />
+      {/* <Menu /> */}
       <Menu />
+      <hr />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import Item from "../menu/Item";
 
 const ContractSave = () => {
   const crtRef = useRef([]);
@@ -18,6 +19,8 @@ const ContractSave = () => {
     price: 0,
     sumPrice: 0,
   });
+
+  const text = "Home > BP사 계약관리 > 계약 등록";
 
   const Grade = [
     { grade: "특급" },
@@ -168,7 +171,7 @@ const ContractSave = () => {
 
   return (
     <div className="div">
-      <h4 className="text-center">BP사 계약등록입니다</h4>
+      <div><Item item={text} /></div>
       <hr />
       <label
         style={{ position: "relative", top: "-15px" }}

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Item from "../menu/Item";
 
 const ProjectSave = () => {
   const pjtRef = useRef([]);
@@ -15,6 +16,8 @@ const ProjectSave = () => {
     totAmt: 0,
     totMm: 0,
   });
+
+  const text = "Home > 프로젝트 관리 > 프로젝트 등록";
 
   useEffect(() => {
     pjtRef.current[0].focus();
@@ -104,7 +107,9 @@ const ProjectSave = () => {
 
   return (
     <div className="div">
-      <h4 className="text-center">프로젝트 등록입니다</h4>
+      <div>
+        <Item item={text} />
+      </div>
       <hr />
       <table class="table table-bordered">
         <tbody>

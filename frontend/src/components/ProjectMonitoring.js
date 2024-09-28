@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ProjectMonitoringContents from "./ProjectMonitoringContents";
+import Item from "../menu/Item";
 
 const ProjectMonitoring = () => {
   const [project, setProject] = useState();
@@ -13,6 +14,8 @@ const ProjectMonitoring = () => {
   const year = today.getFullYear();
   const month = today.getMonth().toString().padStart(2, "0");
   const yyyymm = `${year}${month}`;
+
+  const text = "Home > 프로젝트 모니터링";
 
   useEffect(() => {
     mntRef.current[0].value = yyyymm;
@@ -123,12 +126,10 @@ const ProjectMonitoring = () => {
 
   return (
     <div className="container-fluid">
-      <h4 className="text-center">
-        프로젝트 계약-투입-검수 통합 Monitoring입니다
-      </h4>
+      <div><Item item={text} /></div>
       <hr />
-      <div class="form-group">
-        <b>검수기준월 :</b>
+      <div>
+        <b class="text-center fs-6">검수기준월 :</b>
         &nbsp;
         <input
           type="text"
@@ -137,12 +138,13 @@ const ProjectMonitoring = () => {
           ref={(el) => (mntRef.current[0] = el)}
         />
         &nbsp;
-        <b>프로젝트 :</b>
+        <b class="text-center fs-6">프로젝트 :</b>
         &nbsp;
         <select
           name="pjtNo"
           ref={(el) => (mntRef.current[1] = el)}
           style={{ width: "250px" }}
+          class="form-select-sm"
         >
           <option value="" defaultValue="프로젝트 선택">
             프로젝트 선택
@@ -155,12 +157,13 @@ const ProjectMonitoring = () => {
             ))}
         </select>
         &nbsp;
-        <b>BP사 :</b>
+        <b class="text-center fs-6">BP사 :</b>
         &nbsp;
         <select
           name="companyNo"
           ref={(el) => (mntRef.current[2] = el)}
           style={{ width: "200px" }}
+          class="form-select-sm"
         >
           <option value="" defaultValue="BP사 선택">
             BP사 선택
@@ -174,7 +177,7 @@ const ProjectMonitoring = () => {
             ))}
         </select>
         &nbsp;
-        <button class="btn btn-primary" onClick={monitorProjectList}>
+        <button type="button" class="btn btn-primary btn-sm" onClick={monitorProjectList}>
           조회
         </button>
         &nbsp;

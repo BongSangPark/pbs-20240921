@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import Item from "../menu/Item";
 
 const ProjectList = () => {
   const [project, setProject] = useState([]);
   const inputRef = useRef();
+
+  const text = "Home > 프로젝트 관리 > 프로젝트 조회";
 
   let url = "http://localhost/project/list";
 
@@ -56,7 +59,8 @@ const ProjectList = () => {
 
   return (
     <div className="container">
-      <h4 className="text-center">프로젝트 조회입니다</h4>
+      <div><Item item={text} /></div>
+      <hr />
       <b>프로젝트 명 :</b>
       &nbsp;
       <input
@@ -65,7 +69,7 @@ const ProjectList = () => {
         placeholder="프로젝트명을 입력하세요."
       ></input>
       &nbsp;
-      <button type="button" class="btn btn-primary" onClick={projectLikeList}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={projectLikeList}>
         조회
       </button>
       &nbsp;

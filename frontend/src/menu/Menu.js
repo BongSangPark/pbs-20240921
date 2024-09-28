@@ -1,3 +1,4 @@
+import Item from "./Item";
 import "./menu.css";
 
 const Menu = () => {
@@ -5,7 +6,9 @@ const Menu = () => {
     <div className="container-xxl">
       <ul class="menu">
         <li>
-          <a href="/">Home</a>
+          <a href="/">
+            Home
+          </a>
         </li>
         <li>
           <a href="/monitor">프로젝트 모니터링</a>
@@ -66,7 +69,8 @@ const Menu = () => {
           </ul>
         </li>
       </ul>
-      </div>
+    </div>
   );
 };
+
 export default Menu;

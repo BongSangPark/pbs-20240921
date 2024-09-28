@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
+import Item from "../menu/Item";
 
 const ProjectDetail = () => {
   const param = useParams();
@@ -19,6 +20,8 @@ const ProjectDetail = () => {
     totAmt: 0,
     totMm: 0,
   });
+
+  const text = "Home > 프로젝트 관리 > 프로젝트 상세";
 
   let url = "http://localhost/project/list/" + param.pjtNo;
 
@@ -148,7 +151,8 @@ const ProjectDetail = () => {
 
   return (
     <div className="div">
-      <h4 className="text-center">프로젝트 상세 내역입니다</h4>
+      <div><Item item={text} /></div>
+      <hr />
       <table class="table table-bordered">
         <tbody>
           <tr>

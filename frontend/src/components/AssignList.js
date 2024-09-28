@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import Item from "../menu/Item";
 
 const AssignList = () => {
   const [project, setProject] = useState();
@@ -17,6 +18,8 @@ const AssignList = () => {
     assignList();
     asnRef.current[0].focus();
   }, []);
+
+  const text = "Home > 인력투입 관리 > 실투입 조회";
 
   const projectList = () => {
     let pjtUrl = "http://localhost/assign/projectList";
@@ -91,7 +94,7 @@ const AssignList = () => {
 
   return (
     <div className="container">
-      <h4 className="text-center">인력 실투입 조회입니다</h4>
+      <div><Item item={text} /></div>
       <hr />
       <b>투입년월 :</b>
       &nbsp;
