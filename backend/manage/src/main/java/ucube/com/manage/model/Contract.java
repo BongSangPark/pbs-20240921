@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +28,7 @@ public class Contract {
   private String birth;
   private String startDt;
   private String endDt;
-  private String contractMm;
+  private BigDecimal contractMm;
   private BigDecimal price;
   private BigDecimal sumPrice;
 

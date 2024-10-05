@@ -63,30 +63,31 @@ const CompanyList = () => {
       &nbsp;
       <input
         type="text"
+        style={{ fontSize: "90%" }}
         ref={cmpRef}
         placeholder="BP사 명을 입력하세요."
       ></input>
       &nbsp;
-      <button type="button" class="btn btn-primary" onClick={companyLikeList}>
+      <button type="button" class="btn btn-primary btn-sm"  onClick={companyLikeList}>
         조회
       </button>
       &nbsp;
       <label>(사업자 등록번호를 클릭하여 상세내역을 확인하세요.)</label>
       <label className="right-align">
         <Link to="/company/save">
-          <button type="button" class="btn btn-primary">
+          <button type="button" class="btn btn-primary btn-sm" >
             BP사 등록
           </button>
         </Link>
       </label>
       <hr />
-      <table className="table table-striped table-bordered table table-condensed">
+      <table className="table" style={{ fontSize: "90%" }}>
         <thead>
           <tr align="center">
-            <th>사업자 등록번호</th>
-            <th>BP사 명</th>
-            <th>대표자</th>
-            <th>주소</th>
+            <th className="bg-secondary-subtle scope-col">사업자 등록번호</th>
+            <th className="bg-secondary-subtle scope-col">BP사 명</th>
+            <th className="bg-secondary-subtle scope-col">대표자</th>
+            <th className="bg-secondary-subtle scope-col">주소</th>
           </tr>
         </thead>
         <tbody align="center">
@@ -94,7 +95,7 @@ const CompanyList = () => {
             company.map((company, key) => (
               <tr key={company.companyNo}>
                 <td>
-                  <Link to={`/company/list/${company.companyNo}`}>
+                  <Link to={`/company/list/${company.companyNo}`} style={{ color: "blue"}}>
                     {company.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}
                   </Link>
                 </td>

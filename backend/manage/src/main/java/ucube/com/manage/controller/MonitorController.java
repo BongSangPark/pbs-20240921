@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ucube.com.manage.model.Home;
 import ucube.com.manage.model.Monitor;
 import ucube.com.manage.service.MonitorService;
 
@@ -90,4 +91,23 @@ public class MonitorController {
        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
      }
    }
+
+    // Home like 조회(전체 조회)
+  @GetMapping("/homelike")
+  public ResponseEntity<?> findLikeProject(@RequestParam("pjtNo") String pjtNo,
+      @RequestParam("companyNo") String companyNo) {
+
+    map.put("pjtNo", pjtNo);
+    map.put("companyNo", companyNo);
+
+    try {
+      List<Home> list = monitorService.homeList(map);
+      if (list.isEmpty() || list.size() == 0) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(list, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

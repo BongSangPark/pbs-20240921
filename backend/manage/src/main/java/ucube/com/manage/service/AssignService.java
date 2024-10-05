@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ucube.com.manage.mapper.AssignMapper;
 import ucube.com.manage.model.Assign;
-import ucube.com.manage.model.ProjectInfo;
 
 @Service
 @RequiredArgsConstructor
@@ -18,12 +17,12 @@ import ucube.com.manage.model.ProjectInfo;
 public class AssignService {
   private final AssignMapper assignMapper;
 
-  public List<ProjectInfo> projectList() {
-    return assignMapper.listProject();
+  public List<Assign> BpPersonList(String pjtNo, String companyNo) {
+    return assignMapper.listBpPersonList(pjtNo, companyNo);
   }
 
-  public List<ProjectInfo> companyList() {
-    return assignMapper.listCompany();
+  public Optional<Assign> BpPerson(String pjtNo, String companyNo, String bpPerson) {
+    return assignMapper.BpPerson(pjtNo, companyNo, bpPerson);
   }
 
   public List<Assign> AssignList(String assignMonth) {

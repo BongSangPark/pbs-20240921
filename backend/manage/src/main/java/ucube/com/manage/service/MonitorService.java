@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ucube.com.manage.mapper.MonitorMapper;
+import ucube.com.manage.model.Home;
 import ucube.com.manage.model.Monitor;
 
 @Service
@@ -31,6 +32,10 @@ public class MonitorService {
 
   public List<Monitor> signBpList(String pjtNo, String companyNo) {
     return monitorMapper.listBpSign(pjtNo, companyNo);
+  }
+
+  public List<Home> homeList(HashMap map) {
+    return monitorMapper.listHome(map);
   }
 
   // public Optional<Monitor> signQuery(HashMap map) {

@@ -18,7 +18,7 @@ const ContractList = () => {
   }, []);
 
   const projectList = () => {
-    let pjtUrl = "http://localhost/assign/projectList";
+    let pjtUrl = "http://localhost/contract/projectList";
 
     fetch(pjtUrl)
       .then((Res) => {
@@ -93,6 +93,7 @@ const ContractList = () => {
         name="pjtNo"
         ref={(el) => (inputRef.current[0] = el)}
         style={{ width: "300px" }}
+        class="form-select-sm"
       >
         <option value="" defaultValue="프로젝트 선택">
           프로젝트 선택
@@ -100,7 +101,7 @@ const ContractList = () => {
         {project &&
           project.map((item, key) => (
             <option key={item.pjtNo} value={item.pjtNo}>
-              [ {item.pjtNo} ] {item.pjtNm}
+              [ {item.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')} ] {item.pjtNm}
             </option>
           ))}
       </select>
@@ -109,24 +110,25 @@ const ContractList = () => {
       &nbsp;
       <input
         type="text"
+        style={{ fontSize: "90%" }}
         ref={(el) => (inputRef.current[1] = el)}
         placeholder="BP사 명을 입력하세요."
       ></input>
       &nbsp;
-      <button class="btn btn-primary" onClick={contractLikeList}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={contractLikeList}>
         조회
       </button>
       &nbsp;
       <label>(프로젝트 NO를 클릭하여 상세내역을 확인하세요.)</label>
       <label className="right-align">
         <Link to="/contract/save">
-          <button type="button" class="btn btn-primary">
+          <button type="button" class="btn btn-primary btn-sm" >
             계약 등록
           </button>
         </Link>
       </label>
       <hr />
-      <table className="table table-striped table-bordered table table-condensed">
+      <table className="table" style={{ fontSize: "90%" }}>
         <thead>
           <tr align="center">
             <th className="bg-secondary-subtle scope-col">프로젝트 No</th>
@@ -143,8 +145,8 @@ const ContractList = () => {
             contract.map((contract, key) => (
               <tr key={contract.contract_idx}>
                 <td>
-                  <Link to={`/contract/list/${contract.contract_idx}`}>
-                    {contract.pjtNo}
+                  <Link to={`/contract/list/${contract.contract_idx}`} style={{ color: "blue"}}>
+                    {contract.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')}
                   </Link>
                 </td>
                 <td align="left">{contract.pjtNm}</td>

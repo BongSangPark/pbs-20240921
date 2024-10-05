@@ -1,7 +1,6 @@
 package ucube.com.manage.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

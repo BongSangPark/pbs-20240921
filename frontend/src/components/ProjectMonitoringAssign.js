@@ -100,7 +100,7 @@ const ProjectMonitoringAssign = (props) => {
               <tr key={assign.rowNum}>
                 <td align="left">{assign.companyNm}</td>
                 <td>{assign.bpPerson}</td>
-                <td>{assign.grade}</td>
+                <td>{assign.grade.substr(1)}</td>
                 <td>{assign.startDt}</td>
                 <td>{assign.endDt}</td>
                 <td>{assign.assignMm}</td>

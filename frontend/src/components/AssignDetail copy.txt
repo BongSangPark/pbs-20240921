@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import Item from "../menu/Item";
+import Grade from "./Grade";
 
 const AssignDetail = () => {
   const param = useParams();
@@ -9,6 +10,11 @@ const AssignDetail = () => {
   const [project, setProject] = useState();
   const [company, setCompany] = useState();
   const [contractPerson, setContractPerson] = useState();
+  const [person, setPerson] = useState({
+    bpGrade: "",
+    bpBirth: "",
+  });
+
   const navigate = useNavigate();
   const [assign, setAssign] = useState({
     asign_idx: "",
@@ -80,10 +86,30 @@ const AssignDetail = () => {
       });
   };
 
-  const bpPersonList = (pjtNo, assignCompanyNo) => {
+  const detailList = () => {
+    let url = "http://localhost/assign/list/" + assign_idx + "/" + assignMonth;
+
+    fetch(url)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          alert("데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setAssign(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  const bpPersonList = (assignPjtNo, assignCompanyNo) => {
     let url =
       "http://localhost/assign/assignBpPersonList/" +
-      pjtNo +
+      assignPjtNo +
       "/" +
       assignCompanyNo;
 
@@ -105,112 +131,38 @@ const AssignDetail = () => {
       });
   };
 
-  const detailList = () => {
-    let url = "http://localhost/assign/list/" + assign_idx + "/" + assignMonth;
-
-    fetch(url)
-      .then((Res) => {
-        if (Res.status === 200) {
-          return Res.json();
-        } else if (Res.status === 204) {
-          alert("데이터가 존재하지 않습니다.");
-          throw Error("데이터가 데이터가 존재하지 않습니다.");
-        }
-      })
-      .then((data) => {
-        setAssign(data);
-      })
-      .catch((error) => {
-        console.error(error.message);
-      });
-  };
-
   const handleValueChange = (e) => {
     if (e.target.name === "pjtNo") {
-      setContractPerson("");
       setAssign({
         ...assign,
         [e.target.name]: e.target.value,
-        companyNo: "",
-        companyNm: "",
-        bpPerson: "",
-        grade: "",
-        birth: "",
-        startDt: "",
-        endDt: "",
-        assignMm: "",
       });
-
-      asnRef.current[1].value = "";
-      asnRef.current[2].value = "";
-      asnRef.current[3].value = "";
-      asnRef.current[4].value = "";
-      asnRef.current[5].value = "";
-      asnRef.current[6].value = "";
-      asnRef.current[7].value = "";
-
-      if (e.target.value === "" || e.target.value === null) {
-        setCompany("");
-      } else {
-        companyList(e.target.value);
-      }
+      companyList(e.target.value);
     } else if (e.target.name === "companyNo") {
       setAssign({
         ...assign,
         [e.target.name]: e.target.value,
-        bpPerson: "",
-        grade: "",
-        birth: "",
-        startDt: "",
-        endDt: "",
-        assignMm: "",
       });
-
-      asnRef.current[2].value = "";
-      asnRef.current[3].value = "";
-      asnRef.current[4].value = "";
-      asnRef.current[5].value = "";
-      asnRef.current[6].value = "";
-      asnRef.current[7].value = "";
-
-      if (e.target.value === "" || e.target.value === null) {
-        setContractPerson("");
-      } else {
-        bpPersonList(assign.pjtNo, e.target.value);
-      }
+      bpPersonList(assign.pjtNo, e.target.value);
     } else if (e.target.name === "bpPerson") {
+      let str = e.target.value;
+      let words = str.split(",");
+
       setAssign({
         ...assign,
-        [e.target.name]: e.target.value,
-        grade: "",
-        birth: "",
-        startDt: "",
-        endDt: "",
-        assignMm: "",
+        [e.target.name]: words[0],
+        grade: words[1],
+        birth: words[2],
       });
 
-      asnRef.current[3].value = "";
-      asnRef.current[4].value = "";
-      asnRef.current[5].value = "";
-      asnRef.current[6].value = "";
-      asnRef.current[7].value = "";
+      asnRef.current[3].value = words[1];
+      asnRef.current[7].value = words[2];
 
-      if ((e.target.value !== "") && (e.target.value !== null)) {
-        let str = e.target.value;
-        let words = str.split(',');
-
-        asnRef.current[3].value =  words[1];
-        asnRef.current[7].value =  words[2];
-
-        setAssign({
-          ...assign,
-          bpPerson: words[0],
-          grade: words[1],
-          birth: words[2],
-        });
-
-        asnRef.current[4].focus();
-      }
+      setPerson({
+        ...person,
+        bpGrade: words[1],
+        bpBirth: words[2],
+      });
     } else {
       setAssign({
         ...assign,
@@ -320,25 +272,23 @@ const AssignDetail = () => {
         <Item item={text} />
       </div>
       <hr />
-      <table class="table table-bordered" style={{ fontSize: "90%" }}>
+      <table class="table table-bordered">
         <tbody>
           <tr>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
-              valign="middle"
             >
               투입년월
             </th>
-            <td valign="middle">{assign.assignMonth}</td>
+            <td>{assign.assignMonth}</td>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
-              valign="middle"
             >
               프로젝트
             </th>
-            <td colSpan="5" align="left" className="input-Nm" valign="middle">
+            <td colSpan="5" align="left" className="input-Nm">
               <select
                 name="pjtNo"
                 value={assign.pjtNo}
@@ -347,9 +297,7 @@ const AssignDetail = () => {
                 onChange={(e) => handleValueChange(e)}
                 class="form-select-sm"
               >
-                <option value="">
-                  프로젝트 선택
-                </option>
+                <option defaultValue={assign.pjtNo}>프로젝트 선택</option>
                 {project &&
                   project.map((item, key) => (
                     <option key={item.pjtNo} value={item.pjtNo}>
@@ -362,11 +310,10 @@ const AssignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
-              valign="middle"
             >
               BP사
             </th>
-            <td colSpan="3" align="left" className="input-Nm" valign="middle">
+            <td colSpan="3" align="left" className="input-Nm">
               <select
                 name="companyNo"
                 value={assign.companyNo}
@@ -375,9 +322,7 @@ const AssignDetail = () => {
                 onChange={(e) => handleValueChange(e)}
                 class="form-select-sm"
               >
-                <option value="">
-                  BP사 선택
-                </option>
+                <option defaultValue={assign.companyNo}>프로젝트 선택</option>
                 {company &&
                   company.map((item, key) => (
                     <option key={item.pjtNo} value={item.companyNo}>
@@ -396,25 +341,27 @@ const AssignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
-              valign="middle"
             >
               투입인력
             </th>
-            <td align="left" className="input-100-L" valign="middle">
+            <td align="left" className="input-100-L">
               <select
                 name="bpPerson"
-                value={[assign.bpPerson,assign.grade,assign.birth]}
+                value={assign.bpPerson}
                 ref={(el) => (asnRef.current[2] = el)}
                 style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
                 class="form-select-sm"
               >
-                <option value="">
+                <option value="" defaultValue="인력선택">
                   인력선택
                 </option>
                 {contractPerson &&
-                  contractPerson.map((item, key) => (
-                    <option key={item.rowNum} defaultValue={item.bpPerson} value={[item.bpPerson,item.grade,item.birth]}>
+                  contractPerson.map((item) => (
+                    <option
+                      key={item.rowNum}
+                      value={[item.bpPerson, item.grade, item.birth]}
+                    >
                       {item.bpPerson}
                     </option>
                   ))}
@@ -423,28 +370,34 @@ const AssignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
-              valign="middle"
             >
               등급
             </th>
-            <td align="left" className="input-100-L" valign="middle">
-              <input
-                type="text"
+            <td align="left" className="input-100-L">
+              <select
                 name="grade"
-                value={assign.grade.substr(1)}
+                value={assign.grade}
                 ref={(el) => (asnRef.current[3] = el)}
                 style={{ width: "100%", textAlign: "center" }}
-                readOnly
-              />
+                onChange={(e) => handleValueChange(e)}
+                class="form-select-sm"
+              >
+                <option defaultValue={assign.grade}>선택</option>
+                {Grade &&
+                  Grade.map((g) => (
+                    <option key={g.grade} value={g.grade}>
+                      {g.grade}
+                    </option>
+                  ))}
+              </select>
             </td>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
-              valign="middle"
             >
               투입시작일
             </th>
-            <td align="left" className="input-100-L" valign="middle">
+            <td align="left" className="input-100-L">
               <input
                 type="text"
                 name="startDt"
@@ -458,11 +411,10 @@ const AssignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
-              valign="middle"
             >
               투입종료일
             </th>
-            <td align="left" className="input-100-L" valign="middle">
+            <td align="left" className="input-100-L">
               <input
                 type="text"
                 name="endDt"
@@ -476,11 +428,10 @@ const AssignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
-              valign="middle"
             >
               실투입M/M
             </th>
-            <td align="left" className="input-100-L" valign="middle">
+            <td align="left" className="input-100-L">
               <input
                 type="text"
                 name="assignMm"
@@ -494,11 +445,10 @@ const AssignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
-              valign="middle"
             >
               출생년도
             </th>
-            <td align="left" className="input-100-L" valign="middle">
+            <td align="left" className="input-100-L">
               <input
                 type="text"
                 name="birth"
@@ -513,24 +463,16 @@ const AssignDetail = () => {
         </tbody>
       </table>
       <Link to="/assign/list">
-        <button type="button" class="btn btn-primary btn-sm">
+        <button type="button" class="btn btn-primary">
           투입 조회
         </button>
       </Link>
       &nbsp;
-      <button
-        type="button"
-        class="btn btn-primary btn-sm"
-        onClick={assignUpdate}
-      >
+      <button type="button" class="btn btn-primary" onClick={assignUpdate}>
         투입 수정
       </button>
       &nbsp;
-      <button
-        type="button"
-        class="btn btn-primary btn-sm"
-        onClick={assignDelete}
-      >
+      <button type="button" class="btn btn-primary" onClick={assignDelete}>
         투입 삭제
       </button>
     </div>

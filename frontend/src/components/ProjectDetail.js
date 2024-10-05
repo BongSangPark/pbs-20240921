@@ -153,16 +153,23 @@ const ProjectDetail = () => {
     <div className="div">
       <div><Item item={text} /></div>
       <hr />
-      <table class="table table-bordered">
+      <label
+        style={{ position: "relative", top: "-15px", fontSize: "90%" }}
+        className="right-align"
+      >
+        단위 : 원
+      </label>
+      <table class="table table-bordered" style={{ fontSize: "90%" }}>
         <tbody>
           <tr>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-120-C"
+              valign="middle"
             >
               프로젝트 No
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="pjtNo"
@@ -180,10 +187,11 @@ const ProjectDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               프로젝트 명
             </th>
-            <td align="left" className="input-Nm">
+            <td align="left" className="input-Nm" valign="middle">
               <input
                 type="text"
                 name="pjtNm"
@@ -196,10 +204,11 @@ const ProjectDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               수주금액(원)
             </th>
-            <td align="left" className="input-120-L">
+            <td align="left" className="input-120-L" valign="middle">
               <input
                 type="text"
                 name="totAmt"
@@ -212,10 +221,11 @@ const ProjectDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               프로젝트 시작일
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="startDt"
@@ -229,10 +239,11 @@ const ProjectDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               프로젝트 종료일
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="endDt"
@@ -248,10 +259,11 @@ const ProjectDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               프로젝트 PM
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="pm"
@@ -264,10 +276,11 @@ const ProjectDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-120-C"
+              valign="middle"
             >
               발주기관
             </th>
-            <td align="left" className="input-content">
+            <td align="left" className="input-content" valign="middle">
               <input
                 type="text"
                 name="orderOrg"
@@ -280,10 +293,11 @@ const ProjectDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-120-C"
+              valign="middle"
             >
               직급
             </th>
-            <td align="left" className="input-120-L">
+            <td align="left" className="input-120-L" valign="middle">
               <input
                 type="text"
                 name="position"
@@ -296,10 +310,11 @@ const ProjectDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-120-C"
+              valign="middle"
             >
               기간(개월)
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="term"
@@ -313,10 +328,11 @@ const ProjectDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-120-C"
+              valign="middle"
             >
               총 M/M
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="totMm"
@@ -331,16 +347,16 @@ const ProjectDetail = () => {
         </tbody>
       </table>
       <Link to="/project/list">
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary btn-sm">
           프로젝트 조회
         </button>
       </Link>
       &nbsp;
-      <button type="button" class="btn btn-primary" onClick={projectUpdate}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={projectUpdate}>
         프로젝트 수정
       </button>
       &nbsp;
-      <button type="button" class="btn btn-primary" onClick={projectDelete}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={projectDelete}>
         프로젝트 삭제
       </button>
     </div>

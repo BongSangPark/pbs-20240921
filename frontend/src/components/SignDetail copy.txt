@@ -3,39 +3,42 @@ import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import Item from "../menu/Item";
 
-const AssignDetail = () => {
+const SignDetail = () => {
   const param = useParams();
-  const asnRef = useRef([]);
+  const sgnRef = useRef([]);
   const [project, setProject] = useState();
   const [company, setCompany] = useState();
   const [contractPerson, setContractPerson] = useState();
+  const [oneBpPerson, setOneBpPerson] = useState();
   const navigate = useNavigate();
-  const [assign, setAssign] = useState({
-    asign_idx: "",
+  const [sign, setSign] = useState({
+    sign_idx: "",
     pjtNo: "",
     pjtNm: "",
     companyNo: "",
     companyNm: "",
-    assignMonth: "",
+    signMonth: "",
     bpPerson: "",
     grade: "",
     birth: "",
     startDt: "",
     endDt: "",
-    assignMm: "",
+    signMm: "",
+    price: 0,
+    sumPrice: 0,
   });
 
-  const assign_idx = param.assign_idx;
-  const assignMonth = param.assignMonth;
-  const assignPjtNo = param.pjtNo;
-  const assignCompanyNo = param.companyNo;
+  const sign_idx = param.sign_idx;
+  const signMonth = param.signMonth;
+  const signPjtNo = param.pjtNo;
+  const signCompanyNo = param.companyNo;
 
-  const text = "Home > 인력투입 관리 > 실투입 상세";
+  const text = "Home > 인력검수 관리 > 검수 상세";
 
   useEffect(() => {
     projectList();
-    companyList(assignPjtNo);
-    bpPersonList(assignPjtNo, assignCompanyNo);
+    companyList(signPjtNo);
+    bpPersonList(signPjtNo, signCompanyNo);
     detailList();
   }, []);
 
@@ -59,8 +62,8 @@ const AssignDetail = () => {
       });
   };
 
-  const companyList = (assignPjtNo) => {
-    let url = "http://localhost/contract/contractCompanyList/" + assignPjtNo;
+  const companyList = (signPjtNo) => {
+    let url = "http://localhost/contract/contractCompanyList/" + signPjtNo;
 
     fetch(url)
       .then((Res) => {
@@ -68,7 +71,7 @@ const AssignDetail = () => {
           return Res.json();
         } else if (Res.status === 204) {
           setCompany("");
-          alert("BP 데이터가 존재하지 않습니다.");
+          alert("BP사 데이터가 존재하지 않습니다.");
           throw Error("데이터가 데이터가 존재하지 않습니다.");
         }
       })
@@ -80,10 +83,10 @@ const AssignDetail = () => {
       });
   };
 
-  const bpPersonList = (pjtNo, assignCompanyNo) => {
+  const bpPersonList = (assignPjtNo, assignCompanyNo) => {
     let url =
       "http://localhost/assign/assignBpPersonList/" +
-      pjtNo +
+      assignPjtNo +
       "/" +
       assignCompanyNo;
 
@@ -106,7 +109,8 @@ const AssignDetail = () => {
   };
 
   const detailList = () => {
-    let url = "http://localhost/assign/list/" + assign_idx + "/" + assignMonth;
+    let url =
+      "http://localhost/sign/list/" + sign_idx + "/" + signMonth;
 
     fetch(url)
       .then((Res) => {
@@ -118,7 +122,7 @@ const AssignDetail = () => {
         }
       })
       .then((data) => {
-        setAssign(data);
+        setSign(data);
       })
       .catch((error) => {
         console.error(error.message);
@@ -126,28 +130,45 @@ const AssignDetail = () => {
   };
 
   const handleValueChange = (e) => {
-    if (e.target.name === "pjtNo") {
+    if (e.target.name === "price" || e.target.name === "sumPrice") {
+      let price = e.target.value;
+      price = Number(price.replaceAll(",", ""));
+      if (isNaN(price)) {
+        setSign(...sign, 0);
+      } else {
+        setSign({
+          ...sign,
+          [e.target.name]: price,
+        });
+      }
+
+    } else if (e.target.name === "pjtNo") {
       setContractPerson("");
-      setAssign({
-        ...assign,
-        [e.target.name]: e.target.value,
-        companyNo: "",
-        companyNm: "",
-        bpPerson: "",
-        grade: "",
-        birth: "",
-        startDt: "",
-        endDt: "",
-        assignMm: "",
+      setSign({
+          ...sign,
+          [e.target.name]: e.target.value,
+          companyNo: "",
+          companyNm: "",
+          signMonth: "",
+          bpPerson: "",
+          grade: "",
+          birth: "",
+          startDt: "",
+          endDt: "",
+          signMm: "",
+          price: 0,
+          sumPrice: 0,
       });
 
-      asnRef.current[1].value = "";
-      asnRef.current[2].value = "";
-      asnRef.current[3].value = "";
-      asnRef.current[4].value = "";
-      asnRef.current[5].value = "";
-      asnRef.current[6].value = "";
-      asnRef.current[7].value = "";
+      sgnRef.current[1].value = "";
+      sgnRef.current[2].value = "";
+      sgnRef.current[3].value = "";
+      sgnRef.current[4].value = "";
+      sgnRef.current[5].value = "";
+      sgnRef.current[6].value = "";
+      sgnRef.current[7].value = 0;
+      sgnRef.current[8].value = 0;
+      sgnRef.current[9].value = "";
 
       if (e.target.value === "" || e.target.value === null) {
         setCompany("");
@@ -155,117 +176,168 @@ const AssignDetail = () => {
         companyList(e.target.value);
       }
     } else if (e.target.name === "companyNo") {
-      setAssign({
-        ...assign,
-        [e.target.name]: e.target.value,
-        bpPerson: "",
-        grade: "",
-        birth: "",
-        startDt: "",
-        endDt: "",
-        assignMm: "",
+      setSign({
+          ...sign,
+          [e.target.name]: e.target.value,
+          bpPerson: "",
+          grade: "",
+          birth: "",
+          startDt: "",
+          endDt: "",
+          signMm: "",
+          price: 0,
+          sumPrice: 0,
       });
 
-      asnRef.current[2].value = "";
-      asnRef.current[3].value = "";
-      asnRef.current[4].value = "";
-      asnRef.current[5].value = "";
-      asnRef.current[6].value = "";
-      asnRef.current[7].value = "";
+      sgnRef.current[2].value = "";
+      sgnRef.current[3].value = "";
+      sgnRef.current[4].value = "";
+      sgnRef.current[5].value = "";
+      sgnRef.current[6].value = "";
+      sgnRef.current[7].value = 0;
+      sgnRef.current[8].value = 0;
+      sgnRef.current[9].value = "";
 
       if (e.target.value === "" || e.target.value === null) {
         setContractPerson("");
       } else {
-        bpPersonList(assign.pjtNo, e.target.value);
+        bpPersonList(sign.pjtNo, e.target.value);
       }
     } else if (e.target.name === "bpPerson") {
-      setAssign({
-        ...assign,
+      setSign({
+        ...sign,
         [e.target.name]: e.target.value,
         grade: "",
         birth: "",
         startDt: "",
         endDt: "",
-        assignMm: "",
+        signMm: "",
+        price: 0,
+        sumPrice: 0,
       });
 
-      asnRef.current[3].value = "";
-      asnRef.current[4].value = "";
-      asnRef.current[5].value = "";
-      asnRef.current[6].value = "";
-      asnRef.current[7].value = "";
+      sgnRef.current[3].value = "";
+      sgnRef.current[4].value = "";
+      sgnRef.current[5].value = "";
+      sgnRef.current[6].value = "";
+      sgnRef.current[7].value = 0;
+      sgnRef.current[8].value = 0;
+      sgnRef.current[9].value = "";
 
-      if ((e.target.value !== "") && (e.target.value !== null)) {
-        let str = e.target.value;
-        let words = str.split(',');
-
-        asnRef.current[3].value =  words[1];
-        asnRef.current[7].value =  words[2];
-
-        setAssign({
-          ...assign,
-          bpPerson: words[0],
-          grade: words[1],
-          birth: words[2],
-        });
-
-        asnRef.current[4].focus();
+      if (e.target.value !== "" && e.target.value !== null) {
+        bpPersonOne(sign.pjtNo, sign.companyNo, e.target.value);
       }
+
+      // let str = e.target.value;
+      // let words = str.split(",");
+
+      // sgnRef.current[2].value = words[0];
+      // sgnRef.current[3].value = words[1];
+      // sgnRef.current[9].value = words[2];
+
+      // setSign({
+      //   ...sign,
+      //   [e.target.name]: words[0],
+      //   grade: words[1],
+      //   birth: words[2],
+      // });
+
     } else {
-      setAssign({
-        ...assign,
+      setSign({
+        ...sign,
         [e.target.name]: e.target.value,
       });
     }
   };
 
+  const bpPersonOne = (assignPjtNo, assignCompanyNo, assignPerson) => {
+    let url =
+      "http://localhost/assign/assignBpPerson/" +
+      assignPjtNo +
+      "/" +
+      assignCompanyNo +
+      "/" +
+      assignPerson;
+
+    fetch(url)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          setOneBpPerson("");
+          alert("bp인력 데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setOneBpPerson(data);
+        setSign({
+          ...sign,
+          bpPerson: data.bpPerson,
+          grade: data.grade,
+          birth: data.birth,
+        });
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
   const saveCheck = () => {
-    if (asnRef.current[0].value === "") {
+    if (sgnRef.current[0].value === "") {
       alert("프로젝트를 확인하세요.");
-      asnRef.current[0].focus();
+      sgnRef.current[0].focus();
       return "NO";
-    } else if (asnRef.current[1].value === "") {
+    } else if (sgnRef.current[1].value === "") {
       alert("BP사를 확인하세요.");
-      asnRef.current[1].focus();
+      sgnRef.current[1].focus();
       return "NO";
-    } else if (asnRef.current[2].value === "") {
-      alert("투입인력을 확인하세요.");
-      asnRef.current[2].focus();
+    } else if (sgnRef.current[2].value === "") {
+      alert("검수인력을 확인하세요.");
+      sgnRef.current[2].focus();
       return "NO";
-    } else if (asnRef.current[3].value === "") {
+    } else if (sgnRef.current[3].value === "") {
       alert("등급을 확인하세요.");
-      asnRef.current[3].focus();
+      sgnRef.current[3].focus();
       return "NO";
-    } else if (asnRef.current[4].value === "") {
+    } else if (sgnRef.current[4].value === "") {
       alert("투입 시작일을 확인하세요.");
-      asnRef.current[4].focus();
+      sgnRef.current[4].focus();
       return "NO";
-    } else if (asnRef.current[5].value === 0) {
+    } else if (sgnRef.current[5].value === 0) {
       alert("투입 종료일을 확인하세요.");
-      asnRef.current[5].focus();
+      sgnRef.current[5].focus();
       return "NO";
-    } else if (asnRef.current[6].value === "") {
+    } else if (sgnRef.current[6].value === "") {
       alert("실투입 M/M를 확인하세요.");
-      asnRef.current[6].focus();
+      sgnRef.current[6].focus();
       return "NO";
-    } else if (asnRef.current[7].value === "") {
+    } else if (sgnRef.current[7].value === "") {
+      alert("검수단가를 확인하세요.");
+      sgnRef.current[7].focus();
+      return "NO";
+    } else if (sgnRef.current[8].value === "") {
+      alert("검수금액을 확인하세요.");
+      sgnRef.current[8].focus();
+      return "NO";
+    } else if (sgnRef.current[9].value === "") {
       alert("출생년도를 확인하세요.");
-      asnRef.current[7].focus();
+      sgnRef.current[9].focus();
       return "NO";
     }
     return "OK";
   };
 
-  const assignUpdate = () => {
+  const signUpdate = () => {
     if (saveCheck() === "OK") {
-      let url = "http://localhost/assign/update";
+      let url = "http://localhost/sign/update";
 
       fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json; charset=utf-8",
         },
-        body: JSON.stringify(assign),
+        body: JSON.stringify(sign),
       })
         .then((Res) => {
           if (Res.status === 200) {
@@ -284,13 +356,13 @@ const AssignDetail = () => {
     }
   };
 
-  const assignDelete = () => {
+  const signDelete = () => {
     if (window.confirm("삭제 하시겠습니까?")) {
       let url =
-        "http://localhost/assign/delete/" +
-        param.assign_idx +
+        "http://localhost/sign/delete/" +
+        param.sign_idx +
         "/" +
-        param.assignMonth;
+        param.signMonth;
 
       fetch(url, {
         method: "DELETE",
@@ -299,7 +371,7 @@ const AssignDetail = () => {
           if (Res.status === 200) {
             return Res.json();
           } else {
-            setAssign("");
+            setSign("");
             alert("삭제 문제가 발생했습니다.");
             throw Error("삭제 문제가 발생했습니다.");
           }
@@ -310,15 +382,13 @@ const AssignDetail = () => {
         .catch((error) => {
           console.error(error.message);
         });
-      navigate("/assign/list");
+      navigate("/sign/list");
     }
   };
 
   return (
     <div className="div">
-      <div>
-        <Item item={text} />
-      </div>
+      <div><Item item={text} /></div>
       <hr />
       <table class="table table-bordered" style={{ fontSize: "90%" }}>
         <tbody>
@@ -328,9 +398,9 @@ const AssignDetail = () => {
               className="bg-secondary-subtle scope-col input-100-C"
               valign="middle"
             >
-              투입년월
+              검수년월
             </th>
-            <td valign="middle">{assign.assignMonth}</td>
+            <td>{sign.signMonth}</td>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
@@ -341,20 +411,17 @@ const AssignDetail = () => {
             <td colSpan="5" align="left" className="input-Nm" valign="middle">
               <select
                 name="pjtNo"
-                value={assign.pjtNo}
-                ref={(el) => (asnRef.current[0] = el)}
+                value={sign.pjtNo}
+                ref={(el) => (sgnRef.current[0] = el)}
                 style={{ width: "100%" }}
                 onChange={(e) => handleValueChange(e)}
                 class="form-select-sm"
               >
-                <option value="">
-                  프로젝트 선택
-                </option>
+                <option defaultValue={sign.pjtNo}>프로젝트 선택</option>
                 {project &&
                   project.map((item, key) => (
                     <option key={item.pjtNo} value={item.pjtNo}>
-                      [ {item.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")} ]
-                      {item.pjtNm}
+                      [ {item.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")} ] {item.pjtNm}
                     </option>
                   ))}
               </select>
@@ -369,24 +436,48 @@ const AssignDetail = () => {
             <td colSpan="3" align="left" className="input-Nm" valign="middle">
               <select
                 name="companyNo"
-                value={assign.companyNo}
-                ref={(el) => (asnRef.current[1] = el)}
+                value={sign.companyNo}
+                ref={(el) => (sgnRef.current[1] = el)}
                 style={{ width: "100%" }}
                 onChange={(e) => handleValueChange(e)}
                 class="form-select-sm"
               >
-                <option value="">
-                  BP사 선택
-                </option>
+                <option defaultValue={sign.companyNo}>프로젝트 선택</option>
                 {company &&
                   company.map((item, key) => (
                     <option key={item.pjtNo} value={item.companyNo}>
-                      [{" "}
-                      {item.companyNo.replace(
+                      [ {item.companyNo.replace(
                         /(\d{3})(\d{2})(\d{5})/,
                         "$1-$2-$3"
-                      )}{" "}
-                      ] {item.companyNm}
+                      )} ] {item.companyNm}
+                    </option>
+                  ))}
+              </select>
+            </td>
+            <th
+              align="center"
+              className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
+            >
+              검수인력
+            </th>
+            <td align="left" className="input-100-L" valign="middle">
+              <select
+                name="bpPerson"
+                value={sign.bpPerson}
+                ref={(el) => (sgnRef.current[2] = el)}
+                style={{ width: "100%", textAlign: "center" }}
+                onChange={(e) => handleValueChange(e)}
+                class="form-select-sm"
+              >
+                <option defaultValue={sign.bpPerson}>인력선택</option>
+                {contractPerson &&
+                  contractPerson.map((item, key) => (
+                    <option
+                      key={item.rowNum}
+                      value={[item.bpPerson,item.grade,item.birth]}
+                    >
+                      {item.bpPerson}
                     </option>
                   ))}
               </select>
@@ -398,59 +489,32 @@ const AssignDetail = () => {
               className="bg-secondary-subtle scope-col input-100-C"
               valign="middle"
             >
-              투입인력
-            </th>
-            <td align="left" className="input-100-L" valign="middle">
-              <select
-                name="bpPerson"
-                value={[assign.bpPerson,assign.grade,assign.birth]}
-                ref={(el) => (asnRef.current[2] = el)}
-                style={{ width: "100%", textAlign: "center" }}
-                onChange={(e) => handleValueChange(e)}
-                class="form-select-sm"
-              >
-                <option value="">
-                  인력선택
-                </option>
-                {contractPerson &&
-                  contractPerson.map((item, key) => (
-                    <option key={item.rowNum} defaultValue={item.bpPerson} value={[item.bpPerson,item.grade,item.birth]}>
-                      {item.bpPerson}
-                    </option>
-                  ))}
-              </select>
-            </td>
-            <th
-              align="center"
-              className="bg-secondary-subtle scope-col input-100-C"
-              valign="middle"
-            >
               등급
             </th>
             <td align="left" className="input-100-L" valign="middle">
-              <input
-                type="text"
-                name="grade"
-                value={assign.grade.substr(1)}
-                ref={(el) => (asnRef.current[3] = el)}
-                style={{ width: "100%", textAlign: "center" }}
-                readOnly
-              />
+                <input
+                  type="text"
+                  name="grade"
+                  value={sign.grade.substr(1)}
+                  ref={(el) => (sgnRef.current[3] = el)}
+                  style={{ width: "100%", textAlign: "center" }}
+                  readOnly
+                />
             </td>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
               valign="middle"
             >
-              투입시작일
+              검수시작일
             </th>
             <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="startDt"
-                value={assign.startDt}
+                value={sign.startDt}
                 maxLength="8"
-                ref={(el) => (asnRef.current[4] = el)}
+                ref={(el) => (sgnRef.current[4] = el)}
                 style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
               />
@@ -460,15 +524,15 @@ const AssignDetail = () => {
               className="bg-secondary-subtle scope-col input-100-C"
               valign="middle"
             >
-              투입종료일
+              검수종료일
             </th>
             <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="endDt"
-                value={assign.endDt}
+                value={sign.endDt}
                 maxLength="8"
-                ref={(el) => (asnRef.current[5] = el)}
+                ref={(el) => (sgnRef.current[5] = el)}
                 style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
               />
@@ -478,16 +542,46 @@ const AssignDetail = () => {
               className="bg-secondary-subtle scope-col input-100-C"
               valign="middle"
             >
-              실투입M/M
+              검수M/M
             </th>
             <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
-                name="assignMm"
-                value={assign.assignMm}
+                name="signMm"
+                value={sign.signMm}
                 maxLength="4"
-                ref={(el) => (asnRef.current[6] = el)}
+                ref={(el) => (sgnRef.current[6] = el)}
                 style={{ width: "100%", textAlign: "center" }}
+                onChange={(e) => handleValueChange(e)}
+              />
+            </td>
+            <th
+              align="center"
+              className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
+            >
+              검수단가
+            </th>
+            <td align="left" className="input-100-L" valign="middle">
+              <input
+                type="text"
+                name="price"
+                value={sign.price.toLocaleString("ko-KR")}
+                ref={(el) => (sgnRef.current[7] = el)}
+                style={{ width: "100%", textAlign: "right" }}
+                onChange={(e) => handleValueChange(e)}
+              />
+            </td>
+            <th align="center" className="bg-secondary-subtle scope-col input-100-C" valign="middle">
+              검수금액
+            </th>
+            <td align="left" className="input-100-L" valign="middle">
+              <input
+                type="text"
+                name="sumPrice"
+                value={sign.sumPrice.toLocaleString("ko-KR")}
+                ref={(el) => (sgnRef.current[8] = el)}
+                style={{ width: "100%", textAlign: "right" }}
                 onChange={(e) => handleValueChange(e)}
               />
             </td>
@@ -502,9 +596,9 @@ const AssignDetail = () => {
               <input
                 type="text"
                 name="birth"
-                value={assign.birth}
+                value={sign.birth}
                 maxLength={4}
-                ref={(el) => (asnRef.current[7] = el)}
+                ref={(el) => (sgnRef.current[9] = el)}
                 style={{ width: "100%", textAlign: "center" }}
                 readOnly
               />
@@ -512,29 +606,21 @@ const AssignDetail = () => {
           </tr>
         </tbody>
       </table>
-      <Link to="/assign/list">
-        <button type="button" class="btn btn-primary btn-sm">
-          투입 조회
+      <Link to="/sign/list">
+        <button type="button" class="btn btn-primary btn-sm" valign="middle">
+          검수 조회
         </button>
       </Link>
       &nbsp;
-      <button
-        type="button"
-        class="btn btn-primary btn-sm"
-        onClick={assignUpdate}
-      >
-        투입 수정
+      <button type="button" class="btn btn-primary btn-sm" onClick={signUpdate}>
+        검수 수정
       </button>
       &nbsp;
-      <button
-        type="button"
-        class="btn btn-primary btn-sm"
-        onClick={assignDelete}
-      >
-        투입 삭제
+      <button type="button" class="btn btn-primary btn-sm" onClick={signDelete}>
+        검수 삭제
       </button>
     </div>
   );
 };
 
-export default AssignDetail;
+export default SignDetail;

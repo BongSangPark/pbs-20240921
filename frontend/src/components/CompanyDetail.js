@@ -94,16 +94,17 @@ const CompanyDetail = () => {
     <div className="div">
       <div><Item item={text} /></div>
       <hr />
-      <table class="table table-bordered">
+      <table class="table table-bordered" style={{ fontSize: "90%" }}>
         <tbody>
           <tr>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               사업자 등록번호
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="companyNo"
@@ -121,10 +122,11 @@ const CompanyDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               BP사 명
             </th>
-            <td align="left" className="input-Nm">
+            <td align="left" className="input-Nm" valign="middle">
               <input
                 type="text"
                 name="companyNm"
@@ -136,10 +138,11 @@ const CompanyDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               대표자
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="leader"
@@ -151,10 +154,11 @@ const CompanyDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               회사 전화번호
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 maxLength={11}
@@ -170,10 +174,11 @@ const CompanyDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               영업대표
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="salesLeader"
@@ -185,10 +190,11 @@ const CompanyDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               주 소
             </th>
-            <td align="left" className="input-Nm">
+            <td align="left" className="input-Nm" valign="middle">
               <input
                 type="text"
                 name="companyAddr"
@@ -200,10 +206,11 @@ const CompanyDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               영업직급
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="position"
@@ -215,10 +222,11 @@ const CompanyDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               영업 전화번호
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="salesTel"
@@ -233,16 +241,16 @@ const CompanyDetail = () => {
         </tbody>
       </table>
       <Link to="/company/list">
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary btn-sm">
           BP사 조회
         </button>
       </Link>
       &nbsp;
-      <button type="button" class="btn btn-primary" onClick={companyUpdate}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={companyUpdate}>
         BP사 수정
       </button>
       &nbsp;
-      <button type="button" class="btn btn-primary" onClick={companyDelete}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={companyDelete}>
         BP사 삭제
       </button>
     </div>

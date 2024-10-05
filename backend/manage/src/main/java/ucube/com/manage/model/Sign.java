@@ -28,7 +28,7 @@ public class Sign {
   private String birth;
   private String startDt;
   private String endDt;
-  private String signMm;
+  private BigDecimal signMm;
   private BigDecimal price;
   private BigDecimal sumPrice;
 

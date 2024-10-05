@@ -63,70 +63,134 @@ const AssignSave = () => {
 
   const handleValueChange = (e) => {
     if ( e.target.name === "pjtNo" ) {
-      setContractPerson("");
-      setPerson({
-        ...person,
-        bpGrade: "",
-        bpBirth:"",
-      });
-      setAssign({
-        ...assign,
-        [e.target.name]: e.target.value,
-      });
+      if (e.target.value === "") {
+        setAssign({
+          ...assign,
+          [e.target.name]: e.target.value,
+          companyNo: "",
+          bpPerson: "",
+          grade: "",
+          birth: "",
+          startDt: "",
+          endDt: "",
+          assignMm: "",
+        });
 
-      asnRef.current[2].value =  "";
-      asnRef.current[3].value =  "";
-      asnRef.current[4].value =  "";
-      asnRef.current[5].value =  "";
-      asnRef.current[6].value =  "";
-      asnRef.current[7].value =  "";
-      asnRef.current[8].value =  "";
-
-      if ((e.target.value === "") || (e.target.value === null)) {
         setCompany("");
+        setContractPerson("");
+        setPerson({
+          ...person,
+          bpGrade: "",
+          bpBirth:"",
+        });
+
+        asnRef.current[2].value =  "";
+        asnRef.current[3].value =  "";
+        asnRef.current[4].value =  "";
+        asnRef.current[5].value =  "";
+        asnRef.current[6].value =  "";
+        asnRef.current[7].value =  "";
+        asnRef.current[8].value =  "";
+
       } else {
+        setAssign({
+          ...assign,
+          [e.target.name]: e.target.value,
+        });
+
+        asnRef.current[2].value =  "";
+        asnRef.current[3].value =  "";
+        asnRef.current[4].value =  "";
+        asnRef.current[5].value =  "";
+        asnRef.current[6].value =  "";
+        asnRef.current[7].value =  "";
+        asnRef.current[8].value =  "";
+
         companyList(e.target.value);
       }
-
     } else if ( e.target.name === "companyNo" ) {
-      setPerson({
-        ...person,
-        bpGrade: "",
-        bpBirth:"",
-      });
-      setAssign({
-        ...assign,
-        [e.target.name]: e.target.value,
-      });
-
-      asnRef.current[3].value =  "";
-      asnRef.current[4].value =  "";
-      asnRef.current[5].value =  "";
-      asnRef.current[6].value =  "";
-      asnRef.current[7].value =  "";
-      asnRef.current[8].value =  "";
-
       if (e.target.value === "") {
+        setAssign({
+          ...assign,
+          [e.target.name]: e.target.value,
+          bpPerson: "",
+          grade: "",
+          birth: "",
+          startDt: "",
+          endDt: "",
+          assignMm: "",
+        });
+
         setContractPerson("");
+        setPerson({
+          ...person,
+          bpGrade: "",
+          bpBirth:"",
+        });
+
+        asnRef.current[3].value =  "";
+        asnRef.current[4].value =  "";
+        asnRef.current[5].value =  "";
+        asnRef.current[6].value =  "";
+        asnRef.current[7].value =  "";
+        asnRef.current[8].value =  "";
+
       } else {
+        setAssign({
+          ...assign,
+          [e.target.name]: e.target.value,
+        });
+
+        setContractPerson("");
+        setPerson({
+          ...person,
+          bpGrade: "",
+          bpBirth:"",
+        });
+
+        asnRef.current[3].value =  "";
+        asnRef.current[4].value =  "";
+        asnRef.current[5].value =  "";
+        asnRef.current[6].value =  "";
+        asnRef.current[7].value =  "";
+        asnRef.current[8].value =  "";
+
         bpPersonList(assign.pjtNo, e.target.value);
       }
     } else if ( e.target.name === "bpPerson" ) {
-      setPerson({
-        ...person,
-        bpGrade: "",
-        bpBirth:"",
-      });
+      if (e.target.value === "") {
+        setAssign({
+          ...assign,
+          [e.target.name]: e.target.value,
+          grade: "",
+          birth: "",
+          startDt: "",
+          endDt: "",
+          assignMm: "",
+        });
 
-      asnRef.current[4].value =  "";
-      asnRef.current[5].value =  "";
-      asnRef.current[6].value =  "";
-      asnRef.current[7].value =  "";
-      asnRef.current[8].value =  "";
+        setPerson({
+          ...person,
+          bpGrade: "",
+          bpBirth:"",
+        });
 
-      if ((e.target.value !== "") && (e.target.value !== null)) {
+        asnRef.current[4].value =  "";
+        asnRef.current[5].value =  "";
+        asnRef.current[6].value =  "";
+        asnRef.current[7].value =  "";
+        asnRef.current[8].value =  "";
+
+      } else {
         let str = e.target.value;
         let words = str.split(',');
+
+        setAssign({
+          ...assign,
+          bpPerson: words[0],
+          grade: words[1],
+          birth: words[2],
+        });
 
         asnRef.current[4].value =  words[1];
         asnRef.current[8].value =  words[2];
@@ -135,13 +199,6 @@ const AssignSave = () => {
           ...person,
           bpGrade: words[1].substr(1),
           bpBirth: words[2],
-        });
-
-        setAssign({
-          ...assign,
-          bpPerson: words[0],
-          grade: words[1],
-          birth: words[2],
         });
       }
     } else {

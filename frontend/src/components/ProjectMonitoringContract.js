@@ -56,7 +56,7 @@ const ProjectMonitoringContract = (props) => {
           </tr>
           <tr align="center">
             <th
-              cassName="bg-secondary-subtle scope-col input-80-C"
+              cassName="bg-secondary-subtle scope-col input-80-L"
               style={{ width: "22%" }}
             >
               BP사 명
@@ -109,11 +109,11 @@ const ProjectMonitoringContract = (props) => {
           {contract &&
             contract.map((contract, key) => (
               <tr key={contract.rowNum}>
-                <td align="left" style={{ textOverflow: "ellipsis" }}>
+                <td align="left" style={{ whiteSpace: "nowrap", maxWidth: "60px", textOverflow: "ellipsis" }}>
                   {contract.companyNm}
                 </td>
                 <td>{contract.bpPerson}</td>
-                <td>{contract.grade}</td>
+                <td>{contract.grade.substr(1)}</td>
                 <td>{contract.startDt}</td>
                 <td>{contract.endDt}</td>
                 <td>{contract.contractMm}</td>

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ucube.com.manage.model.ProjectInfo;
 import ucube.com.manage.model.Assign;
 import ucube.com.manage.service.AssignService;
 
@@ -34,11 +33,11 @@ public class AssignController {
 
   private HashMap<String, Object> map = new HashMap<String, Object>();
 
-  // 프로젝트 정보 조회
-  @GetMapping("/projectList")
-  public ResponseEntity<?> projectList() {
+  // bp인력 전체조회
+  @GetMapping("/assignBpPersonList/{pjtNo}/{companyNo}")
+  public ResponseEntity<?> findBpPersonAll(@PathVariable("pjtNo") String pjtNo, @PathVariable("companyNo") String companyNo) {
     try {
-      List<ProjectInfo> list = assignService.projectList();
+      List<Assign> list = assignService.BpPersonList(pjtNo, companyNo);
 
       if (list.isEmpty() || list.size() == 0) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -49,19 +48,15 @@ public class AssignController {
     }
   }
 
-  // BP사 정보 조회
-  @GetMapping("/companyList")
-  public ResponseEntity<?> companyList() {
-    try {
-      List<ProjectInfo> list = assignService.companyList();
+  // bp인력 조회
+  @GetMapping("/assignBpPerson/{pjtNo}/{companyNo}/{bpPerson}")
+  public ResponseEntity<?> findBpPerson(@PathVariable("pjtNo") String pjtNo, @PathVariable("companyNo") String companyNo, @PathVariable("bpPerson") String bpPerson) {
 
-      if (list.isEmpty() || list.size() == 0) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      }
-      return new ResponseEntity<>(list, HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    Optional<Assign> assign = assignService.BpPerson(pjtNo, companyNo, bpPerson);
+    if (assign.isPresent()) {
+      return new ResponseEntity<>(assign.get(), HttpStatus.OK);
     }
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
   // 전체 조회

@@ -41,6 +41,12 @@
   margin: 20px;
 }
 
+.td {
+  border: 1px solid black;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .input-20-C {
   width: 20px;
   text-align: center;
@@ -179,4 +185,5 @@
 .right-align {
   float: right;
 }
+
 

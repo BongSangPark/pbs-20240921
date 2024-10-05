@@ -65,6 +65,7 @@ const ProjectList = () => {
       &nbsp;
       <input
         type="text"
+        style={{ fontSize: "90%" }}
         ref={inputRef}
         placeholder="프로젝트명을 입력하세요."
       ></input>
@@ -76,19 +77,20 @@ const ProjectList = () => {
       <label>(프로젝트 NO를 클릭하여 상세내역을 확인하세요.)</label>
       <label className="right-align">
         <Link to="/project/save">
-          <button type="button" class="btn btn-primary">
+          <button type="button" class="btn btn-primary btn-sm" >
             프로젝트 등록
           </button>
         </Link>
       </label>
       <hr />
-      <table className="table table-striped table-bordered table table-condensed">
+      <table className="table" style={{ fontSize: "90%" }}>
         <thead>
           <tr align="center">
-            <th>프로젝트 No</th>
-            <th>프로젝트 명</th>
-            <th>PM</th>
-            <th>직급</th>
+            <th className="bg-secondary-subtle scope-col">프로젝트 No</th>
+            <th className="bg-secondary-subtle scope-col">프로젝트 명</th>
+            <th className="bg-secondary-subtle scope-col">수주금액(원)</th>
+            <th className="bg-secondary-subtle scope-col">PM</th>
+            <th className="bg-secondary-subtle scope-col">직급</th>
           </tr>
         </thead>
         <tbody align="center">
@@ -96,11 +98,12 @@ const ProjectList = () => {
             project.map((project, key) => (
               <tr key={project.pjtNo}>
                 <td>
-                  <Link to={`/project/list/${project.pjtNo}`}>
+                  <Link to={`/project/list/${project.pjtNo}`} style={{ color: "blue"}}>
                     {project.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')}
                   </Link>
                 </td>
                 <td align="left">{project.pjtNm}</td>
+                <td>{project.totAmt.toLocaleString("ko-KR")}</td>
                 <td>{project.pm}</td>
                 <td>{project.position}</td>
               </tr>

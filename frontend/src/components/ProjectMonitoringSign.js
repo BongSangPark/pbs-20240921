@@ -110,7 +110,7 @@ const ProjectMonitoringSign = (props) => {
               <tr key={sign.rowNum}>
                 <td align="left">{sign.companyNm}</td>
                 <td>{sign.bpPerson}</td>
-                <td>{sign.grade}</td>
+                <td>{sign.grade.substr(1)}</td>
                 <td>{sign.startDt}</td>
                 <td>{sign.endDt}</td>
                 <td>{sign.signMm}</td>

@@ -22,7 +22,7 @@ const AssignList = () => {
   const text = "Home > 인력투입 관리 > 실투입 조회";
 
   const projectList = () => {
-    let pjtUrl = "http://localhost/assign/projectList";
+    let pjtUrl = "http://localhost/contract/projectList";
 
     fetch(pjtUrl)
       .then((Res) => {
@@ -51,7 +51,7 @@ const AssignList = () => {
           return Res.json();
         } else if (Res.status === 204) {
           setAssign("");
-          alert("데이터가 존재하지 않습니다.");
+          alert("데이터가 존재하지 않습니다. 투입년월을 확인하세요!");
           throw Error("데이터가 데이터가 존재하지 않습니다.");
         }
       })
@@ -101,7 +101,7 @@ const AssignList = () => {
       <input
         type="text"
         maxLength="6"
-        style={{ width: "80px", textAlign: "center" }}
+        style={{ width: "80px", fontSize: "90%", textAlign: "center" }}
         ref={(el) => (asnRef.current[0] = el)}
       />
       &nbsp;
@@ -111,6 +111,7 @@ const AssignList = () => {
         name="pjtNo"
         ref={(el) => (asnRef.current[1] = el)}
         style={{ width: "200px" }}
+        class="form-select-sm"
       >
         <option value="" defaultValue="프로젝트 선택">
           프로젝트 선택
@@ -127,6 +128,7 @@ const AssignList = () => {
       &nbsp;
       <input
         type="text"
+        style={{ fontSize: "90%" }}
         ref={(el) => (asnRef.current[2] = el)}
         placeholder="BP사 명을 입력하세요."
       ></input>
@@ -135,25 +137,25 @@ const AssignList = () => {
       &nbsp;
       <input
         type="text"
-        style={{ width: "80px", textAlign: "center" }}
+        style={{ width: "80px", fontSize: "90%", textAlign: "center" }}
         ref={(el) => (asnRef.current[3] = el)}
         placeholder="투입인력을 입력하세요."
       ></input>
       &nbsp;
-      <button class="btn btn-primary" onClick={assignLikeList}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={assignLikeList}>
         조회
       </button>
       &nbsp;
       <label style={{ fontSize: "10pt"}}>(프로젝트 NO를 클릭하여 상세내역을...)</label>
       <label className="right-align">
         <Link to="/assign/save">
-          <button type="button" class="btn btn-primary">
+          <button type="button" class="btn btn-primary btn-sm">
             실투입 등록
           </button>
         </Link>
       </label>
       <hr />
-      <table className="table table-striped table-bordered table table-condensed">
+      <table className="table" style={{ fontSize: "90%" }}>
         <thead>
           <tr align="center">
             <th className="bg-secondary-subtle scope-col">투입년월</th>
@@ -171,7 +173,7 @@ const AssignList = () => {
               <tr key={assign.assign_idx}>
                 <td align="center">{assign.assignMonth}</td>
                 <td>
-                  <Link to={`/assign/list/${assign.assign_idx}/${assign.assignMonth}`}>
+                  <Link to={`/assign/list/${assign.assign_idx}/${assign.assignMonth}/${assign.pjtNo}/${assign.companyNo}`} style={{ color: "blue"}}>
                     {assign.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')}
                   </Link>
                 </td>
@@ -179,7 +181,7 @@ const AssignList = () => {
                 <td>{assign.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}</td>
                 <td align="left">{assign.companyNm}</td>
                 <td>{assign.bpPerson}</td>
-                <td>{assign.grade}</td>
+                <td>{assign.grade.substr(1)}</td>
               </tr>
             ))}
         </tbody>

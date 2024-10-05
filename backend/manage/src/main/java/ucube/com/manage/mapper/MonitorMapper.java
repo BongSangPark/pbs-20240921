@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import ucube.com.manage.model.Home;
 import ucube.com.manage.model.Monitor;
 
 @Mapper
@@ -19,5 +20,7 @@ public interface MonitorMapper {
   public List<Monitor> listBpSign(String pjtNo, String companyNo);
 
   // public Optional<Monitor> findById(HashMap map);
+
+  public List<Home> listHome(HashMap map);
 
 }

@@ -104,16 +104,17 @@ const CompanySave = () => {
         <Item item={text} />
       </div>
       <hr />
-      <table class="table table-bordered">
+      <table class="table table-bordered" style={{ fontSize: "90%" }}>
         <tbody>
           <tr>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               사업자 등록번호
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 maxLength="10"
@@ -127,10 +128,11 @@ const CompanySave = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               BP사 명
             </th>
-            <td align="left" className="input-Nm">
+            <td align="left" className="input-Nm" valign="middle">
               <input
                 type="text"
                 name="companyNm"
@@ -142,10 +144,11 @@ const CompanySave = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               대표자
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="leader"
@@ -157,10 +160,11 @@ const CompanySave = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               회사 전화번호
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 maxLength={11}
@@ -176,10 +180,11 @@ const CompanySave = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               영업대표
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="salesLeader"
@@ -191,10 +196,11 @@ const CompanySave = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               주 소
             </th>
-            <td align="left" className="input-Nm">
+            <td align="left" className="input-Nm" valign="middle">
               <input
                 type="text"
                 name="companyAddr"
@@ -206,10 +212,11 @@ const CompanySave = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               영업직급
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="position"
@@ -221,10 +228,11 @@ const CompanySave = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               영업 전화번호
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="salesTel"
@@ -238,18 +246,18 @@ const CompanySave = () => {
           </tr>
         </tbody>
       </table>
-      <button type="button" class="btn btn-primary" onClick={companySave}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={companySave}>
         BP사 등록
       </button>
       &nbsp;
       <Link to="/">
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary btn-sm">
           등록 취소
         </button>
       </Link>
       &nbsp;
       <Link to="/company/list">
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary btn-sm">
           BP사 조회
         </button>
       </Link>

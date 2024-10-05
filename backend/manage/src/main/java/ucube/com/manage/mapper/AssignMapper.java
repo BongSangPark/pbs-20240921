@@ -7,14 +7,12 @@ import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 
 import ucube.com.manage.model.Assign;
-import ucube.com.manage.model.ProjectInfo;
 
 @Mapper
 public interface AssignMapper {
 
-  public List<ProjectInfo> listProject();
-
-  public List<ProjectInfo> listCompany();
+  public List<Assign> listBpPersonList(String pjtNo, String companyNo);
+  public Optional<Assign> BpPerson(String pjtNo, String companyNo, String bpPerson);
 
   public List<Assign> listAssign(String assignMonth);
 
@@ -27,4 +25,5 @@ public interface AssignMapper {
   public int updateAssign(Assign assign);
 
   public int deleteAssign(HashMap map);
+
 }

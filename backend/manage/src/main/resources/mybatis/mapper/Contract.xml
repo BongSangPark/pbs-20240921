@@ -9,7 +9,7 @@
     select  pjtNo,
             pjtNm
     from  project_tb
-    group by pjtNo
+    group by pjtNo, pjtNm
     order by pjtNo asc
 
   </select>
@@ -19,7 +19,19 @@
     select  companyNo,
             companyNm
     from  company_tb
-    group by companyNo
+    group by companyNo, companyNm
+    order by companyNo asc
+
+  </select>
+
+  <select id="listContractCompany" resultType="ProjectInfo">
+
+    select  b.companyNo companyNo,
+            b.companyNm companyNm
+    from  contract_tb a,  company_tb  b
+    where a.pjtNo = #{pjtNo}
+    and   a.companyNo = b.companyNo
+    group by b.companyNo, b.companyNm
     order by companyNo asc
 
   </select>

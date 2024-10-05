@@ -16,6 +16,8 @@ public interface ContractMapper {
 
   public List<ProjectInfo> listCompany();
 
+  public List<ProjectInfo> listContractCompany(String pjtNo);
+
   public List<Contract> listContract();
 
   public Optional<Contract> findById(String contract_idx);

@@ -21,11 +21,12 @@ const ProjectMonitoring = () => {
     mntRef.current[0].value = yyyymm;
     projectList();
     companyList();
+    monitorProjectList();
     mntRef.current[0].focus();
   }, []);
 
   const projectList = () => {
-    let pjtUrl = "http://localhost/assign/projectList";
+    let pjtUrl = "http://localhost/contract/projectList";
 
     fetch(pjtUrl)
       .then((Res) => {
@@ -45,7 +46,7 @@ const ProjectMonitoring = () => {
   };
 
   const companyList = () => {
-    let comurl = "http://localhost/assign/companyList";
+    let comurl = "http://localhost/contract/companyList";
 
     fetch(comurl)
       .then((Res) => {
@@ -98,7 +99,7 @@ const ProjectMonitoring = () => {
             return Res.json();
           } else if (Res.status === 204) {
             setMonitor("");
-            alert("monitorProjectList 데이터가 존재하지 않습니다.");
+            alert("monitorProjectList 데이터가 존재하지 않습니다. 검수기준월을 확인하세요!");
             throw Error("데이터가 데이터가 존재하지 않습니다.");
           }
         })
@@ -134,10 +135,10 @@ const ProjectMonitoring = () => {
         <input
           type="text"
           maxLength="6"
-          style={{ width: "80px", textAlign: "center" }}
+          style={{ width: "80px", fontSize: "90%", textAlign: "center" }}
           ref={(el) => (mntRef.current[0] = el)}
         />
-        &nbsp;
+        &nbsp;&nbsp;&nbsp;
         <b class="text-center fs-6">프로젝트 :</b>
         &nbsp;
         <select
@@ -156,7 +157,7 @@ const ProjectMonitoring = () => {
               </option>
             ))}
         </select>
-        &nbsp;
+        &nbsp;&nbsp;&nbsp;
         <b class="text-center fs-6">BP사 :</b>
         &nbsp;
         <select
@@ -188,7 +189,7 @@ const ProjectMonitoring = () => {
       <hr />
       <table
         className="table table-sm"
-        style={{ fontSize: "80%" }}
+        style={{ fontSize: "90%" }}
       >
         <thead>
           <tr align="center">

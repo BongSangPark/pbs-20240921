@@ -8,9 +8,10 @@ const SignDetail = () => {
   const sgnRef = useRef([]);
   const [project, setProject] = useState();
   const [company, setCompany] = useState();
+  const [contractPerson, setContractPerson] = useState();
   const navigate = useNavigate();
   const [sign, setSign] = useState({
-    asign_idx: "",
+    sign_idx: "",
     pjtNo: "",
     pjtNm: "",
     companyNo: "",
@@ -26,23 +27,22 @@ const SignDetail = () => {
     sumPrice: 0,
   });
 
-  const text = "Home > 인력검수 관리 > 검수 상세";
+  const sign_idx = param.sign_idx;
+  const signMonth = param.signMonth;
+  const signPjtNo = param.pjtNo;
+  const signCompanyNo = param.companyNo;
 
-  const Grade = [
-    { grade: "특급" },
-    { grade: "고급" },
-    { grade: "중급" },
-    { grade: "초급" },
-  ];
+  const text = "Home > 인력검수 관리 > 검수 상세";
 
   useEffect(() => {
     projectList();
-    companyList();
+    companyList(signPjtNo);
+    bpPersonList(signPjtNo, signCompanyNo);
     detailList();
   }, []);
 
   const projectList = () => {
-    let url = "http://localhost/assign/projectList";
+    let url = "http://localhost/contract/projectList";
 
     fetch(url)
       .then((Res) => {
@@ -61,15 +61,16 @@ const SignDetail = () => {
       });
   };
 
-  const companyList = () => {
-    let url = "http://localhost/assign/companyList";
+  const companyList = (signPjtNo) => {
+    let url = "http://localhost/contract/contractCompanyList/" + signPjtNo;
 
     fetch(url)
       .then((Res) => {
         if (Res.status === 200) {
           return Res.json();
         } else if (Res.status === 204) {
-          alert("데이터가 존재하지 않습니다.");
+          setCompany("");
+          alert("BP사 데이터가 존재하지 않습니다.");
           throw Error("데이터가 데이터가 존재하지 않습니다.");
         }
       })
@@ -81,9 +82,34 @@ const SignDetail = () => {
       });
   };
 
+  const bpPersonList = (assignPjtNo, assignCompanyNo) => {
+    let url =
+      "http://localhost/assign/assignBpPersonList/" +
+      assignPjtNo +
+      "/" +
+      assignCompanyNo;
+
+    fetch(url)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          setContractPerson("");
+          alert("bp인력 데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setContractPerson(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
   const detailList = () => {
     let url =
-      "http://localhost/sign/list/" + param.sign_idx + "/" + param.signMonth;
+      "http://localhost/sign/list/" + sign_idx + "/" + signMonth;
 
     fetch(url)
       .then((Res) => {
@@ -113,6 +139,105 @@ const SignDetail = () => {
           ...sign,
           [e.target.name]: price,
         });
+      }
+
+    } else if (e.target.name === "pjtNo") {
+      setContractPerson("");
+      setSign({
+          ...sign,
+          [e.target.name]: e.target.value,
+          companyNo: "",
+          companyNm: "",
+          signMonth: "",
+          bpPerson: "",
+          grade: "",
+          birth: "",
+          startDt: "",
+          endDt: "",
+          signMm: "",
+          price: 0,
+          sumPrice: 0,
+      });
+
+      sgnRef.current[1].value = "";
+      sgnRef.current[2].value = "";
+      sgnRef.current[3].value = "";
+      sgnRef.current[4].value = "";
+      sgnRef.current[5].value = "";
+      sgnRef.current[6].value = "";
+      sgnRef.current[7].value = 0;
+      sgnRef.current[8].value = 0;
+      sgnRef.current[9].value = "";
+
+      if (e.target.value === "" || e.target.value === null) {
+        setCompany("");
+      } else {
+        companyList(e.target.value);
+      }
+    } else if (e.target.name === "companyNo") {
+      setSign({
+          ...sign,
+          [e.target.name]: e.target.value,
+          bpPerson: "",
+          grade: "",
+          birth: "",
+          startDt: "",
+          endDt: "",
+          signMm: "",
+          price: 0,
+          sumPrice: 0,
+      });
+
+      sgnRef.current[2].value = "";
+      sgnRef.current[3].value = "";
+      sgnRef.current[4].value = "";
+      sgnRef.current[5].value = "";
+      sgnRef.current[6].value = "";
+      sgnRef.current[7].value = 0;
+      sgnRef.current[8].value = 0;
+      sgnRef.current[9].value = "";
+
+      if (e.target.value === "" || e.target.value === null) {
+        setContractPerson("");
+      } else {
+        bpPersonList(sign.pjtNo, e.target.value);
+      }
+    } else if (e.target.name === "bpPerson") {
+      setSign({
+        ...sign,
+        [e.target.name]: e.target.value,
+        grade: "",
+        birth: "",
+        startDt: "",
+        endDt: "",
+        signMm: "",
+        price: 0,
+        sumPrice: 0,
+      });
+
+      sgnRef.current[3].value = "";
+      sgnRef.current[4].value = "";
+      sgnRef.current[5].value = "";
+      sgnRef.current[6].value = "";
+      sgnRef.current[7].value = 0;
+      sgnRef.current[8].value = 0;
+      sgnRef.current[9].value = "";
+
+      if ((e.target.value !== "") && (e.target.value !== null)) {
+        let str = e.target.value;
+        let words = str.split(',');
+
+        sgnRef.current[3].value =  words[1];
+        sgnRef.current[9].value =  words[2];
+
+        setSign({
+          ...sign,
+          bpPerson: words[0],
+          grade: words[1],
+          birth: words[2],
+        });
+
+        sgnRef.current[4].focus();
       }
     } else {
       setSign({
@@ -229,12 +354,13 @@ const SignDetail = () => {
     <div className="div">
       <div><Item item={text} /></div>
       <hr />
-      <table class="table table-bordered">
+      <table class="table table-bordered" style={{ fontSize: "90%" }}>
         <tbody>
           <tr>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               검수년월
             </th>
@@ -242,22 +368,24 @@ const SignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               프로젝트
             </th>
-            <td colSpan="5" align="left" className="input-Nm">
+            <td colSpan="5" align="left" className="input-Nm" valign="middle">
               <select
                 name="pjtNo"
                 value={sign.pjtNo}
                 ref={(el) => (sgnRef.current[0] = el)}
                 style={{ width: "100%" }}
                 onChange={(e) => handleValueChange(e)}
+                class="form-select-sm"
               >
-                <option defaultValue={sign.pjtNo}>프로젝트 선택</option>
+                <option value="" defaultValue={sign.pjtNo}>프로젝트 선택</option>
                 {project &&
                   project.map((item, key) => (
                     <option key={item.pjtNo} value={item.pjtNo}>
-                      [ {item.pjtNo} ] {item.pjtNm}
+                      [ {item.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")} ] {item.pjtNm}
                     </option>
                   ))}
               </select>
@@ -265,22 +393,27 @@ const SignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               BP사
             </th>
-            <td colSpan="3" align="left" className="input-Nm">
+            <td colSpan="3" align="left" className="input-Nm" valign="middle">
               <select
                 name="companyNo"
                 value={sign.companyNo}
                 ref={(el) => (sgnRef.current[1] = el)}
                 style={{ width: "100%" }}
                 onChange={(e) => handleValueChange(e)}
+                class="form-select-sm"
               >
-                <option defaultValue={sign.companyNo}>프로젝트 선택</option>
+                <option value="" defaultValue={sign.companyNo}>프로젝트 선택</option>
                 {company &&
                   company.map((item, key) => (
                     <option key={item.pjtNo} value={item.companyNo}>
-                      [ {item.companyNo} ] {item.companyNm}
+                      [ {item.companyNo.replace(
+                        /(\d{3})(\d{2})(\d{5})/,
+                        "$1-$2-$3"
+                      )} ] {item.companyNm}
                     </option>
                   ))}
               </select>
@@ -288,51 +421,58 @@ const SignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               검수인력
             </th>
-            <td align="left" className="input-100-L">
-              <input
-                type="text"
+            <td align="left" className="input-100-L" valign="middle">
+              <select
                 name="bpPerson"
-                value={sign.bpPerson}
+                value={[sign.bpPerson,sign.grade,sign.birth]}
                 ref={(el) => (sgnRef.current[2] = el)}
                 style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
-              />
+                class="form-select-sm"
+              >
+                <option value="">인력선택</option>
+                {contractPerson &&
+                  contractPerson.map((item, key) => (
+                    <option
+                      key={item.rowNum}
+                      defaultValue={item.bpPerson} value={[item.bpPerson,item.grade,item.birth]}
+                    >
+                      {item.bpPerson}
+                    </option>
+                  ))}
+              </select>
             </td>
           </tr>
           <tr>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               등급
             </th>
-            <td align="left" className="input-100-L">
-              <select
-                name="grade"
-                value={sign.grade}
-                ref={(el) => (sgnRef.current[3] = el)}
-                style={{ width: "100%", textAlign: "center" }}
-                onChange={(e) => handleValueChange(e)}
-              >
-                <option defaultValue={sign.grade}>선택</option>
-                {Grade &&
-                  Grade.map((g) => (
-                    <option key={g.grade} value={g.grade}>
-                      {g.grade}
-                    </option>
-                  ))}
-              </select>
+            <td align="left" className="input-100-L" valign="middle">
+                <input
+                  type="text"
+                  name="grade"
+                  value={sign.grade.substr(1)}
+                  ref={(el) => (sgnRef.current[3] = el)}
+                  style={{ width: "100%", textAlign: "center" }}
+                  readOnly
+                />
             </td>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               검수시작일
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="startDt"
@@ -346,10 +486,11 @@ const SignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               검수종료일
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="endDt"
@@ -363,10 +504,11 @@ const SignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               검수M/M
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="signMm"
@@ -380,10 +522,11 @@ const SignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               검수단가
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="price"
@@ -393,10 +536,10 @@ const SignDetail = () => {
                 onChange={(e) => handleValueChange(e)}
               />
             </td>
-            <th align="center" className="bg-secondary-subtle scope-col input-100-C">
+            <th align="center" className="bg-secondary-subtle scope-col input-100-C" valign="middle">
               검수금액
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="sumPrice"
@@ -409,10 +552,11 @@ const SignDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               출생년도
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="birth"
@@ -420,23 +564,23 @@ const SignDetail = () => {
                 maxLength={4}
                 ref={(el) => (sgnRef.current[9] = el)}
                 style={{ width: "100%", textAlign: "center" }}
-                onChange={(e) => handleValueChange(e)}
+                readOnly
               />
             </td>
           </tr>
         </tbody>
       </table>
       <Link to="/sign/list">
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary btn-sm" valign="middle">
           검수 조회
         </button>
       </Link>
       &nbsp;
-      <button type="button" class="btn btn-primary" onClick={signUpdate}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={signUpdate}>
         검수 수정
       </button>
       &nbsp;
-      <button type="button" class="btn btn-primary" onClick={signDelete}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={signDelete}>
         검수 삭제
       </button>
     </div>

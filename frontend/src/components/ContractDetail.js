@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import Item from "../menu/Item";
+import Grade from "./Grade";
 
 const ContractDetail = () => {
   const param = useParams();
@@ -25,13 +26,6 @@ const ContractDetail = () => {
   });
 
   const text = "Home > BP사 계약관리 > 계약 상세";
-
-  const Grade = [
-    { grade: "특급" },
-    { grade: "고급" },
-    { grade: "중급" },
-    { grade: "초급" },
-  ];
 
   useEffect(() => {
     detailList();
@@ -171,35 +165,38 @@ const ContractDetail = () => {
       <div><Item item={text} /></div>
       <hr />
       <label
-        style={{ position: "relative", top: "-15px" }}
+        style={{ position: "relative", top: "-15px", fontSize: "90%" }}
         className="right-align"
       >
         단위 : 원
       </label>
-      <table class="table table-bordered">
+      <table class="table table-bordered" style={{ fontSize: "90%" }}>
         <tbody>
           <tr>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               프로젝트 No
             </th>
-            <td>{detail.pjtNo}</td>
+            <td valign="middle">{detail.pjtNo.replace(/(\d{6})(\d{3})/, '$1-$2')}</td>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               사업자 등록번호
             </th>
-            <td>{detail.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}</td>
+            <td valign="middle">{detail.companyNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')}</td>
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               투입인력
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="bpPerson"
@@ -212,16 +209,18 @@ const ContractDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               등급
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <select
                 name="grade"
                 value={detail.grade}
                 ref={(el) => (crtRef.current[1] = el)}
                 style={{ width: "100%", textAlign: "center" }}
                 onChange={(e) => handleValueChange(e)}
+                class="form-select-sm"
               >
                 <option defaultValue={detail.grade}>
                   등급선택
@@ -237,10 +236,11 @@ const ContractDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               출생년도
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="birth"
@@ -256,10 +256,11 @@ const ContractDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               계약시작일
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="startDt"
@@ -273,10 +274,11 @@ const ContractDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               계약종료일
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="endDt"
@@ -290,10 +292,11 @@ const ContractDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               계약단가
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="price"
@@ -306,10 +309,11 @@ const ContractDetail = () => {
             <th
               align="center"
               className="bg-secondary-subtle scope-col input-100-C"
+              valign="middle"
             >
               계약M/M
             </th>
-            <td align="left" className="input-100-L">
+            <td align="left" className="input-100-L" valign="middle">
               <input
                 type="text"
                 name="contractMm"
@@ -320,10 +324,10 @@ const ContractDetail = () => {
                 onChange={(e) => handleValueChange(e)}
               />
             </td>
-            <th align="center" className="bg-secondary-subtle scope-col">
+            <th align="center" className="bg-secondary-subtle scope-col" valign="middle">
               계약금액
             </th>
-            <td colSpan="3" align="left" className="input-amt">
+            <td colSpan="3" align="left" className="input-amt" valign="middle">
               <input
                 type="text"
                 name="sumPrice"
@@ -337,16 +341,16 @@ const ContractDetail = () => {
         </tbody>
       </table>
       <Link to="/contract/list">
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary btn-sm">
           계약 조회
         </button>
       </Link>
       &nbsp;
-      <button type="button" class="btn btn-primary" onClick={contractUpdate}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={contractUpdate}>
         계약 수정
       </button>
       &nbsp;
-      <button type="button" class="btn btn-primary" onClick={contractDelete}>
+      <button type="button" class="btn btn-primary btn-sm" onClick={contractDelete}>
         계약 삭제
       </button>
     </div>

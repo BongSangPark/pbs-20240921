@@ -29,6 +29,10 @@ public class ContractService {
     return contractMapper.listCompany();
   }
 
+  public List<ProjectInfo> contractCompanyList(String pjtNo) {
+    return contractMapper.listContractCompany(pjtNo);
+  }
+
   public List<Contract> ContractList() {
     return contractMapper.listContract();
   }

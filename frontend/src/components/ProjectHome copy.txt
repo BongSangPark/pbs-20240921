@@ -1,0 +1,190 @@
+import React, { useEffect, useRef, useState } from "react";
+import Item from "../menu/Item";
+import Grade from "./Grade";
+
+const ProjectHome = () => {
+  const [project, setProject] = useState();
+  const [home, setHome] = useState([]);
+  const [pjtNo, setPjtNo] = useState("");
+  const [companyNo, setCompanyNo] = useState("");
+  const homRef = useRef([]);
+
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth().toString().padStart(2, "0");
+  const yyyymm = `${year}${month}`;
+
+  const text = "Home";
+
+  useEffect(() => {
+    homRef.current[0].value = yyyymm;
+    projectList();
+    homRef.current[0].focus();
+  }, []);
+
+  const projectList = () => {
+    let pjtUrl = "http://localhost/contract/projectList";
+
+    fetch(pjtUrl)
+      .then((Res) => {
+        if (Res.status === 200) {
+          return Res.json();
+        } else if (Res.status === 204) {
+          alert("프로젝트 List 데이터가 존재하지 않습니다.");
+          throw Error("데이터가 데이터가 존재하지 않습니다.");
+        }
+      })
+      .then((data) => {
+        setProject(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  const listCheck = () => {
+    if (homRef.current[0].value.length !== 6) {
+      alert("기준월을 입력하세요.(6자리)");
+      homRef.current[0].focus();
+      return "NO";
+    }
+    return "OK";
+  };
+
+  const homeProjectList = () => {
+    if (listCheck() === "OK") {
+      setPjtNo("");
+      setCompanyNo("");
+
+      let likeRef1 = homRef.current[0].value;
+      let likeRef2 = homRef.current[1].value;
+
+      let baseurl = "http://localhost/monitor/homelike";
+      let listUrl =
+        baseurl +
+        "?homeMonth=" +
+        likeRef1 +
+        "&pjtNo=" +
+        likeRef2;
+
+      fetch(listUrl, { method: "GET" })
+        .then((Res) => {
+          if (Res.status === 200) {
+            return Res.json();
+          } else if (Res.status === 204) {
+            setHome("");
+            alert("homeProjectList 데이터가 존재하지 않습니다.");
+            throw Error("데이터가 데이터가 존재하지 않습니다.");
+          }
+        })
+        .then((data) => {
+          setHome(data);
+          return true;
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    }
+  };
+
+  const navigate = (pjtNo, companyNo) => {
+    let likeRef1 = homRef.current[0].value;
+    let baseurl = "http://localhost/monitor/like";
+    let listUrl = baseurl + "?signMonth=" + likeRef1 + "&pjtNo=" + pjtNo + "&companyNo=" + companyNo;
+
+    navigate("/monitor/:pjtNo/:companyNo");
+  }
+
+  return (
+    <div className="container-fluid">
+      <div><Item item={text} /></div>
+      <hr />
+      <div>
+        <b class="text-center fs-6">기준년월 :</b>
+        &nbsp;
+        <input
+          type="text"
+          maxLength="6"
+          style={{ width: "80px", fontSize: "90%", textAlign: "center" }}
+          ref={(el) => (homRef.current[0] = el)}
+        />
+        &nbsp;&nbsp;&nbsp;
+        <b class="text-center fs-6">프로젝트 :</b>
+        &nbsp;
+        <select
+          name="pjtNo"
+          ref={(el) => (homRef.current[1] = el)}
+          style={{ width: "250px" }}
+          class="form-select-sm"
+        >
+          <option value="" defaultValue="프로젝트 선택">
+            프로젝트 선택
+          </option>
+          {project &&
+            project.map((item, key) => (
+              <option key={item.pjtNo} value={item.pjtNo}>
+                [ {item.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")} ] {item.pjtNm}
+              </option>
+            ))}
+        </select>
+        &nbsp;
+        <button type="button" class="btn btn-primary btn-sm" onClick={homeProjectList}>
+          조회
+        </button>
+        &nbsp;
+        <label style={{ fontSize: "12pt" }}>
+          (자료조회 및 상세버튼을 클릭하여 Monitoring 상세내역을 확인하세요!)
+        </label>
+      </div>
+      <hr />
+      <table className="table">
+        <thead>
+          <tr align="center">
+            <th className="bg-secondary-subtle scope-col">프로젝트 No</th>
+            <th className="bg-secondary-subtle scope-col">프로젝트 명</th>
+            <th className="bg-secondary-subtle scope-col">발주기관</th>
+            <th className="bg-secondary-subtle scope-col">수주금액</th>
+            <th className="bg-secondary-subtle scope-col">프로젝트시작일</th>
+            <th className="bg-secondary-subtle scope-col">프로젝트종료일</th>
+            <th className="bg-secondary-subtle scope-col">총M/M</th>
+            <th className="bg-secondary-subtle scope-col">계약M/M</th>
+            <th className="bg-secondary-subtle scope-col">투입M/M</th>
+            <th className="bg-secondary-subtle scope-col">검수M/M</th>
+            <th className="bg-secondary-subtle scope-col">PM</th>
+          </tr>
+        </thead>
+        <tbody>
+          {home &&
+            home.map((home, key) => (
+              <tr key={home.rowNum}>
+                <td>
+                  {home.pjtNo.replace(/(\d{6})(\d{3})/, "$1-$2")}
+                  <label className="right-align">
+                    <button type="button" class="btn btn-outline-primary btn-sm"
+                      onClick={() => { navigate(home.pjtNo, home.companyNo); }} >
+                      상세
+                    </button>
+                  </label>
+                </td>
+                <td align="left">{home.pjtNm}</td>
+                <td>{home.orderOrg}</td>
+                <td align="right">{home.totAmt.toLocaleString("ko-KR")}</td>
+                <td>{home.startDt}</td>
+                <td>{home.endDt}</td>
+                <td>{home.totMm}</td>
+                <td>{home.contractMm}</td>
+                <td>{ home.assignMm !== null ? home.assignMm : null }
+                </td>
+                <td>{ home.signMm !== null ? home.signMm : null }</td>
+                <td>
+                  {home.pm} {home.position}
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default ProjectHome;

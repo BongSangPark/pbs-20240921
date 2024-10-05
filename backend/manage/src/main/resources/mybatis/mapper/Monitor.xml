@@ -73,7 +73,7 @@
               a.contractMm,
               a.price,
               a.sumPrice
-    order by b.companyNm asc, a.bpPerson asc
+    order by b.companyNm asc, a.grade asc, a.bpPerson asc
 
   </select>
 
@@ -100,7 +100,7 @@
               a.startDt,
               a.endDt,
               a.assignMm
-    order by b.companyNm asc, a.bpPerson asc
+    order by b.companyNm asc, a.grade asc, a.bpPerson asc
 
   </select>
 
@@ -131,12 +131,11 @@
               a.signMm,
               a.price,
               a.sumPrice
-    order by b.companyNm asc, a.bpPerson asc
+    order by b.companyNm asc, a.grade asc, a.bpPerson asc
 
   </select>
 
   <select id="listBpMonitor" parameterType="Hashmap" resultType="Monitor">
-
 
     select  c.signMonth   signMonth,
             a.pjtNo       pjtNo,
@@ -169,6 +168,327 @@
               a.totMm,
               a.totAmt
     order by c.signMonth, a.pjtNo asc, a.startDt asc, a.totAmt desc
+
+  </select>
+
+  <select id="listHome" parameterType="Hashmap" resultType="Home">
+
+        <!-- select  @ROWNUM:=@ROWNUM+1 AS rowNum,
+                a.pjtNo       pjtNo,
+                a.pjtNm       pjtNm,
+                a.orderOrg    orderOrg,
+                a.startDt     startDt,
+                a.endDt       endDt,
+                a.pm          pm,
+                a.position    position,
+                a.totMm       totMm,
+                a.totAmt      totAmt,
+                a.companyNo   companyNo,
+                b.companyNm   companyNm,
+                a.contractGrade contractGrade,
+                a.contractMm    contractMm,
+                a.assignMonth	assignMonth,
+                a.assignGrade   assignGrade,
+                a.assignMm      assignMm,
+                a.signMonth	signMonth,
+                a.signGrade     signGrade,
+                a.signMm        signMm
+        from    (
+                select
+                        a.pjtNo       pjtNo,
+                        a.pjtNm       pjtNm,
+                        a.orderOrg    orderOrg,
+                        a.startDt     startDt,
+                        a.endDt       endDt,
+                        a.pm          pm,
+                        a.position    position,
+                        a.totMm       totMm,
+                        a.totAmt      totAmt,
+                        a.companyNo   companyNo,
+                        a.contractGrade contractGrade,
+                        a.contractMm    contractMm,
+                        a.assignMonth	assignMonth,
+                        a.assignGrade   assignGrade,
+                        a.assignMm      assignMm,
+                        b.signMonth	signMonth,
+                        b.grade         signGrade,
+                        sum(b.signMm)   signMm
+                from    (
+                        select
+                                a.pjtNo       pjtNo,
+                                a.pjtNm       pjtNm,
+                                a.orderOrg    orderOrg,
+                                a.startDt     startDt,
+                                a.endDt       endDt,
+                                a.pm          pm,
+                                a.position    position,
+                                a.totMm       totMm,
+                                a.totAmt      totAmt,
+                                a.companyNo   companyNo,
+                                a.contractGrade contractGrade,
+                                a.contractMm  contractMm,
+                                b.assignMonth	assignMonth,
+                                b.grade       assignGrade,
+                                sum(b.assignMm)  assignMm
+                        from	(
+                                select
+                                        a.pjtNo       pjtNo,
+                                        a.pjtNm       pjtNm,
+                                        a.orderOrg    orderOrg,
+                                        a.startDt     startDt,
+                                        a.endDt       endDt,
+                                        a.pm          pm,
+                                        a.position    position,
+                                        a.totMm       totMm,
+                                        a.totAmt      totAmt,
+                                        b.companyNo   companyNo,
+                                        b.grade       contractGrade,
+                                        sum(b.contractMm)  contractMm
+                                from  (
+                                        select
+                                                pjtNo       pjtNo,
+                                                pjtNm       pjtNm,
+                                                orderOrg    orderOrg,
+                                                startDt     startDt,
+                                                endDt       endDt,
+                                                pm          pm,
+                                                position    position,
+                                                totMm       totMm,
+                                                totAmt      totAmt
+                                        from    project_tb
+                                        where   pjtNo   LIKE concat('%', #{pjtNo}, '%')
+                                        group   by
+                                                pjtNo,
+                                                pjtNm,
+                                                orderOrg,
+                                                startDt,
+                                                endDt,
+                                                pm,
+                                                position,
+                                                totMm,
+                                                totAmt
+                                        ) a
+                                        LEFT    JOIN contract_tb b
+                                        on      a.pjtNo = b.pjtNo
+                                        and     b.companyNo LIKE concat('%', #{companyNo}, '%')
+                                group   by
+                                        a.pjtNo,
+                                        a.pjtNm,
+                                        a.orderOrg,
+                                        a.startDt,
+                                        a.endDt,
+                                        a.pm,
+                                        a.position,
+                                        a.totMm,
+                                        a.totAmt,
+                                        b.companyNo,
+                                        b.grade
+                                ) a
+                                LEFT    JOIN assign_tb b
+                                on      a.pjtNo     = b.pjtNo
+                                and     a.companyNo = b.companyNo
+                                and	a.contractGrade = b.grade
+                        group by
+                                a.pjtNo,
+                                a.pjtNm,
+                                a.orderOrg,
+                                a.startDt,
+                                a.endDt,
+                                a.pm,
+                                a.position,
+                                a.totMm,
+                                a.totAmt,
+                                a.companyNo,
+                                a.contractGrade,
+                                a.contractMm,
+                                b.assignMonth,
+                                b.grade
+                        ) a
+                        LEFT    JOIN sign_tb b
+                        on      a.pjtNo     = b.pjtNo
+                        and     a.companyNo = b.companyNo
+                        and	a.contractGrade = b.grade
+                group   by
+                        a.pjtNo,
+                        a.pjtNm,
+                        a.orderOrg,
+                        a.startDt,
+                        a.endDt,
+                        a.pm,
+                        a.position,
+                        a.totMm,
+                        a.totAmt,
+                        a.companyNo,
+                        a.contractGrade,
+                        a.contractMm,
+                        a.assignMonth,
+                        a.assignGrade,
+                        a.assignMm,
+                        b.signMonth,
+                        b.grade
+                order   by
+                        a.pjtNo,
+                        a.companyNo,
+                        a.contractGrade,
+                        a.assignMonth,
+                        a.assignGrade,
+                        a.assignMm,
+                        b.signMonth,
+                        b.grade
+                ) a, company_tb b,
+                (SELECT @ROWNUM:=0) AS R
+        where   a.companyNo = b.companyNo
+        order   by
+                a.pjtNo,
+                b.companyNm,
+                a.contractGrade,
+                a.assignMonth,
+                a.assignGrade,
+                a.signMonth,
+                a.signGrade -->
+
+        select  @ROWNUM:=@ROWNUM+1 AS rowNum,
+                a.pjtNo       pjtNo,
+                a.pjtNm       pjtNm,
+                a.orderOrg    orderOrg,
+                a.startDt     startDt,
+                a.endDt       endDt,
+                a.totMm       totMm,
+                a.totAmt      totAmt,
+                a.companyNo   companyNo,
+                b.companyNm   companyNm,
+                a.contractGrade contractGrade,
+                a.contractMm    contractMm,
+                a.assignGrade   assignGrade,
+                a.assignMm      assignMm,
+                a.signGrade     signGrade,
+                a.signMm        signMm
+        from    (
+                select
+                        a.pjtNo       pjtNo,
+                        a.pjtNm       pjtNm,
+                        a.orderOrg    orderOrg,
+                        a.startDt     startDt,
+                        a.endDt       endDt,
+                        a.totMm       totMm,
+                        a.totAmt      totAmt,
+                        a.companyNo   companyNo,
+                        a.contractGrade contractGrade,
+                        a.contractMm    contractMm,
+                        a.assignGrade   assignGrade,
+                        a.assignMm      assignMm,
+                        b.grade         signGrade,
+                        sum(b.signMm)   signMm
+                from    (
+                        select
+                                a.pjtNo       pjtNo,
+                                a.pjtNm       pjtNm,
+                                a.orderOrg    orderOrg,
+                                a.startDt     startDt,
+                                a.endDt       endDt,
+                                a.totMm       totMm,
+                                a.totAmt      totAmt,
+                                a.companyNo   companyNo,
+                                a.contractGrade contractGrade,
+                                a.contractMm  contractMm,
+                                b.grade       assignGrade,
+                                sum(b.assignMm)  assignMm
+                        from	(
+                                select
+                                        a.pjtNo       pjtNo,
+                                        a.pjtNm       pjtNm,
+                                        a.orderOrg    orderOrg,
+                                        a.startDt     startDt,
+                                        a.endDt       endDt,
+                                        a.totMm       totMm,
+                                        a.totAmt      totAmt,
+                                        b.companyNo   companyNo,
+                                        b.grade       contractGrade,
+                                        sum(b.contractMm)  contractMm
+                                from  (
+                                        select
+                                                pjtNo       pjtNo,
+                                                pjtNm       pjtNm,
+                                                orderOrg    orderOrg,
+                                                startDt     startDt,
+                                                endDt       endDt,
+                                                totMm       totMm,
+                                                totAmt      totAmt
+                                        from    project_tb
+                                        where   pjtNo   LIKE concat('%', #{pjtNo}, '%')
+                                        group   by
+                                                pjtNo,
+                                                pjtNm,
+                                                orderOrg,
+                                                startDt,
+                                                endDt,
+                                                totMm,
+                                                totAmt
+                                        ) a
+                                        LEFT    JOIN contract_tb b
+                                        on      a.pjtNo = b.pjtNo
+                                        and     b.companyNo LIKE concat('%', #{companyNo}, '%')
+                                group   by
+                                        a.pjtNo,
+                                        a.pjtNm,
+                                        a.orderOrg,
+                                        a.startDt,
+                                        a.endDt,
+                                        a.totMm,
+                                        a.totAmt,
+                                        b.companyNo,
+                                        b.grade
+                                ) a
+                                LEFT    JOIN assign_tb b
+                                on      a.pjtNo     = b.pjtNo
+                                and     a.companyNo = b.companyNo
+                                and	a.contractGrade = b.grade
+                        group by
+                                a.pjtNo,
+                                a.pjtNm,
+                                a.orderOrg,
+                                a.startDt,
+                                a.endDt,
+                                a.totMm,
+                                a.totAmt,
+                                a.companyNo,
+                                a.contractGrade,
+                                a.contractMm,
+                                b.grade
+                        ) a
+                        LEFT    JOIN sign_tb b
+                        on      a.pjtNo     = b.pjtNo
+                        and     a.companyNo = b.companyNo
+                        and	a.contractGrade = b.grade
+                group   by
+                        a.pjtNo,
+                        a.pjtNm,
+                        a.orderOrg,
+                        a.startDt,
+                        a.endDt,
+                        a.totMm,
+                        a.totAmt,
+                        a.companyNo,
+                        a.contractGrade,
+                        a.contractMm,
+                        a.assignGrade,
+                        a.assignMm,
+                        b.grade
+                order   by
+                        a.pjtNo,
+                        a.companyNo,
+                        a.contractGrade,
+                        a.assignGrade,
+                        b.grade
+                ) a, company_tb b,
+                (SELECT @ROWNUM:=0) AS R
+        where   a.companyNo = b.companyNo
+        order   by
+                a.pjtNo,
+                b.companyNo,
+                a.contractGrade,
+                a.assignGrade,
+                a.signGrade
 
   </select>
 

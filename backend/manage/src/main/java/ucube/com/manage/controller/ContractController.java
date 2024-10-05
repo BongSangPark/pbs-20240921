@@ -1,11 +1,11 @@
 package ucube.com.manage.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import ucube.com.manage.model.Contract;
 import ucube.com.manage.model.ProjectInfo;
 import ucube.com.manage.service.ContractService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @CrossOrigin("*")
 @RestController
@@ -57,6 +54,21 @@ public class ContractController {
   public ResponseEntity<?> companyList() {
     try {
       List<ProjectInfo> list = contractService.companyList();
+
+      if (list.isEmpty() || list.size() == 0) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(list, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // 계약한 BP사 정보 조회
+  @GetMapping("/contractCompanyList/{pjtNo}")
+  public ResponseEntity<?> contractCompanyList(@PathVariable("pjtNo") String pjtNo) {
+    try {
+      List<ProjectInfo> list = contractService.contractCompanyList(pjtNo);
 
       if (list.isEmpty() || list.size() == 0) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

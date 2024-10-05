@@ -4,23 +4,42 @@
 
 <mapper namespace="ucube.com.manage.mapper.AssignMapper">
 
-  <select id="listProject" resultType="ProjectInfo">
+  <select id="listBpPersonList" parameterType="String" resultType="Assign">
 
-    select  pjtNo,
-            pjtNm
-    from  project_tb
-    group by pjtNo
-    order by pjtNo asc
+    select  @ROWNUM:=@ROWNUM+1 AS rowNum,
+            b.bpPerson      bpPerson,
+            b.grade         grade,
+            b.birth         birth
+    from  project_tb  a,
+          contract_tb b,
+          (SELECT @ROWNUM:=0) AS R
+    where a.pjtNo     = #{pjtNo}
+    and   a.pjtNo     = b.pjtNo
+    and   b.companyNo = #{companyNo}
+    group by
+          b.bpPerson,
+          b.grade,
+          b.birth
+    order by b.bpPerson
 
   </select>
 
-  <select id="listCompany" resultType="ProjectInfo">
+  <select id="BpPerson" parameterType="String" resultType="Assign">
 
-    select  companyNo,
-            companyNm
-    from  company_tb
-    group by companyNo
-    order by companyNo asc
+    select
+            b.bpPerson      bpPerson,
+            b.grade         grade,
+            b.birth         birth
+    from  project_tb  a,
+          contract_tb b
+    where a.pjtNo     = #{pjtNo}
+    and   a.pjtNo     = b.pjtNo
+    and   b.companyNo = #{companyNo}
+    and   b.bpPerson  = #{bpPerson}
+    group by
+          b.bpPerson,
+          b.grade,
+          b.birth
 
   </select>
 
@@ -44,7 +63,7 @@
     from  assign_tb a,
           project_tb  b,
           company_tb  c
-    where a.assignMonth = ${assignMonth}
+    where a.assignMonth = #{assignMonth}
     and   a.pjtNo     = b.pjtNo
     and   a.companyNo = c.companyNo
     group by a.assign_idx,
@@ -77,7 +96,7 @@
           project_tb  b,
           company_tb  c
     where a.assign_idx  = ${assign_idx}
-    and   a.assignMonth = ${assignMonth}
+    and   a.assignMonth = #{assignMonth}
     and   a.pjtNo       = b.pjtNo
     and   a.companyNo   = c.companyNo
 
@@ -96,7 +115,7 @@
     from  assign_tb a,
           project_tb  b,
           company_tb  c
-    where a.assignMonth = ${assignMonth}
+    where a.assignMonth = #{assignMonth}
     and   a.pjtNo = b.pjtNo
     and   a.companyNo = c.companyNo
     and   a.pjtNo  LIKE concat('%', #{pjtNo}, '%')
@@ -126,7 +145,7 @@
         endDt       = #{endDt},
         assignMm    = #{assignMm}
     where assign_idx  = ${assign_idx}
-    and   assignMonth = ${assignMonth}
+    and   assignMonth = #{assignMonth}
 
   </update>
 
@@ -134,7 +153,7 @@
 
     delete from assign_tb
     where assign_idx  = ${assign_idx}
-    and   assignMonth = ${assignMonth}
+    and   assignMonth = #{assignMonth}
 
   </delete>
 
